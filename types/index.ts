@@ -9,6 +9,7 @@ export interface User {
   trustScore: number;
   isSuperhost: boolean;
   userType: "host" | "surfer" | "both";
+  worldIdVerified?: boolean;
 }
 
 export interface SignUpData {

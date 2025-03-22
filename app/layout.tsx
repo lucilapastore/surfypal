@@ -33,7 +33,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <MiniKitProvider>
+          <MiniKitProvider appId={process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID}>
             <SurfyPalProvider>
               <div className="flex min-h-screen flex-col">
                 <Header />

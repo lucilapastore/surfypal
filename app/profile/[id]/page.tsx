@@ -1,26 +1,33 @@
-"use client"
+"use client";
 
-import { useParams } from "next/navigation"
-import { useUserById } from "@/hooks/use-users"
-import { useSurfyPalStore } from "@/lib/store"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { TrustScoreDisplay } from "@/components/trust-score/trust-score-display"
-import { TrustScoreHistory } from "@/components/trust-score/trust-score-history"
-import { UserListings } from "@/components/profile/user-listings"
-import { UserReviews } from "@/components/profile/user-reviews"
-import { UserBookings } from "@/components/profile/user-bookings"
-import { CalendarDays, MapPin, Shield, Award } from "lucide-react"
-import Link from "next/link"
+import { UserBookings } from "@/components/profile/user-bookings";
+import { UserListings } from "@/components/profile/user-listings";
+import { UserReviews } from "@/components/profile/user-reviews";
+import { TrustScoreDisplay } from "@/components/trust-score/trust-score-display";
+import { TrustScoreHistory } from "@/components/trust-score/trust-score-history";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import WorldcoinValidationButton from "@/components/worldcoin-validation-button";
+import { useUserById } from "@/hooks/use-users";
+import { useSurfyPalStore } from "@/lib/store";
+import { Award, CalendarDays, CheckCircle, MapPin, Shield } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export default function ProfilePage() {
-  const params = useParams()
-  const { id } = params
-  const user = useUserById(id as string)
-  const { currentUser } = useSurfyPalStore()
-  const isOwnProfile = currentUser?.id === id
+  const params = useParams();
+  const { id } = params;
+  const user = useUserById(id as string);
+  const { currentUser } = useSurfyPalStore();
+  const isOwnProfile = currentUser?.id === id;
 
   if (!user) {
     return (
@@ -33,7 +40,7 @@ export default function ProfilePage() {
           <Link href="/">Return Home</Link>
         </Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -45,7 +52,12 @@ export default function ProfilePage() {
               <AvatarImage src={user.avatar} alt={user.name} />
               <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <CardTitle className="mt-4">{user.name}</CardTitle>
+            <CardTitle className="mt-4 flex items-center justify-center gap-2">
+              {user.name}
+              {user.worldIdVerified && (
+                <CheckCircle size={16} className="text-blue-500" />
+              )}
+            </CardTitle>
             <CardDescription className="flex items-center justify-center gap-2">
               <MapPin className="h-3 w-3" />
               {user.location}
@@ -61,10 +73,16 @@ export default function ProfilePage() {
                 <CalendarDays className="h-4 w-4 text-muted-foreground" />
                 <span>Joined {user.joinedDate}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-muted-foreground" />
-                <span>Verified with World ID</span>
-              </div>
+              {user.worldIdVerified ? (
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-blue-500" />
+                  <span className="text-blue-500 font-medium">
+                    Verified with World ID
+                  </span>
+                </div>
+              ) : (
+                isOwnProfile && <WorldcoinValidationButton user={user} />
+              )}
               {user.isSuperhost && (
                 <div className="flex items-center gap-2">
                   <Award className="h-4 w-4 text-yellow-500" />
@@ -93,7 +111,9 @@ export default function ProfilePage() {
             <TabsTrigger value="trust-score">Trust Score</TabsTrigger>
             <TabsTrigger value="listings">Listings</TabsTrigger>
             <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            {isOwnProfile && <TabsTrigger value="bookings">Bookings</TabsTrigger>}
+            {isOwnProfile && (
+              <TabsTrigger value="bookings">Bookings</TabsTrigger>
+            )}
           </TabsList>
 
           <TabsContent value="trust-score" className="mt-6">
@@ -101,7 +121,8 @@ export default function ProfilePage() {
               <CardHeader>
                 <CardTitle>Trust Score History</CardTitle>
                 <CardDescription>
-                  See how {isOwnProfile ? "your" : `${user.name}'s`} Trust Score has evolved over time
+                  See how {isOwnProfile ? "your" : `${user.name}'s`} Trust Score
+                  has evolved over time
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -126,6 +147,5 @@ export default function ProfilePage() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
-

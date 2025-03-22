@@ -32,6 +32,24 @@ export async function getUser(userId: string): Promise<User | null> {
   return user || null;
 }
 
+export async function updateUser(
+  userId: string,
+  updates: Partial<User>
+): Promise<User | null> {
+  await delay(500);
+  const userIndex = mockUsers.findIndex((user) => user.id === userId);
+
+  if (userIndex === -1) return null;
+
+  // Update the user properties
+  mockUsers[userIndex] = {
+    ...mockUsers[userIndex],
+    ...updates,
+  };
+
+  return mockUsers[userIndex];
+}
+
 export async function mockSignUp(data: SignUpData): Promise<User> {
   await delay(1000);
   // For demo purposes, we're just returning one of the existing users
