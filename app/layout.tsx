@@ -2,6 +2,7 @@ import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SurfyPalProvider } from "@/context/surfypal-context";
+import MiniKitProvider from "@/context/world-context";
 import { Inter } from "next/font/google";
 import type React from "react";
 import { Toaster } from "sonner";
@@ -32,17 +33,19 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SurfyPalProvider>
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-1">
-                <div className="container mx-auto px-4 py-8 md:px-6 lg:px-8">
-                  {children}
-                </div>
-              </main>
-              <Footer />
-            </div>
-          </SurfyPalProvider>
+          <MiniKitProvider>
+            <SurfyPalProvider>
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-1">
+                  <div className="container mx-auto px-4 py-8 md:px-6 lg:px-8">
+                    {children}
+                  </div>
+                </main>
+                <Footer />
+              </div>
+            </SurfyPalProvider>
+          </MiniKitProvider>
           <Toaster />
         </ThemeProvider>
       </body>
