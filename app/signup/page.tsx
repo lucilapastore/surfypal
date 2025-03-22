@@ -1,35 +1,48 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useSurfyPalStore } from "@/lib/store"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { WorldIdButton } from "@/components/auth/world-id-button"
-import { TrustScoreExplainer } from "@/components/home/trust-score-explainer"
-import { Separator } from "@/components/ui/separator"
-import { CheckCircle2 } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSurfyPalStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { WorldIdButton } from "@/components/auth/world-id-button";
+import { TrustScoreExplainer } from "@/components/home/trust-score-explainer";
+import { Separator } from "@/components/ui/separator";
+import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
 export default function SignUpPage() {
-  const [step, setStep] = useState(1)
-  const [userType, setUserType] = useState<"surfer" | "host" | "both">("surfer")
+  const [step, setStep] = useState(1);
+  const [userType, setUserType] = useState<"surfer" | "host" | "both">(
+    "surfer"
+  );
 
   return (
     <div>
       <Card className="mx-auto w-full max-w-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Join SurfyPal</CardTitle>
-          <CardDescription>Create your account and start your hosting journey today</CardDescription>
+          <CardDescription>
+            Create your account and start your hosting journey today
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {step === 1 && (
             <div>
-              <h2 className="mb-4 text-xl font-semibold">Verify Your Identity</h2>
+              <h2 className="mb-4 text-xl font-semibold">
+                Verify Your Identity
+              </h2>
               <div className="mb-8">
                 <WorldIdButton onSuccess={() => setStep(2)} />
               </div>
@@ -39,7 +52,8 @@ export default function SignUpPage() {
                   <div>
                     <span className="font-medium">Privacy Preserving</span>
                     <p className="text-muted-foreground">
-                      Your identity is verified without sharing personal information.
+                      Your identity is verified without sharing personal
+                      information.
                     </p>
                   </div>
                 </div>
@@ -47,14 +61,18 @@ export default function SignUpPage() {
                   <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-500" />
                   <div>
                     <span className="font-medium">One-Time Process</span>
-                    <p className="text-muted-foreground">Verify once and use your World ID across all platforms.</p>
+                    <p className="text-muted-foreground">
+                      Verify once and use your World ID across all platforms.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-500" />
                   <div>
                     <span className="font-medium">Trust Score Boost</span>
-                    <p className="text-muted-foreground">Start with a higher Trust Score as a verified user.</p>
+                    <p className="text-muted-foreground">
+                      Start with a higher Trust Score as a verified user.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -63,8 +81,13 @@ export default function SignUpPage() {
 
           {step === 2 && (
             <div>
-              <h2 className="mb-4 text-xl font-semibold">Choose Your Account Type</h2>
-              <Tabs value={userType} onValueChange={(v) => setUserType(v as any)}>
+              <h2 className="mb-4 text-xl font-semibold">
+                Choose Your Account Type
+              </h2>
+              <Tabs
+                value={userType}
+                onValueChange={(v) => setUserType(v as any)}
+              >
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="surfer">Surfer</TabsTrigger>
                   <TabsTrigger value="host">Host</TabsTrigger>
@@ -75,8 +98,12 @@ export default function SignUpPage() {
                     <h3 className="font-medium">As a Surfer, you can:</h3>
                     <ul className="ml-6 list-disc space-y-2 text-muted-foreground">
                       <li>Find and book stays with trusted local hosts</li>
-                      <li>Build your Trust Score through positive interactions</li>
-                      <li>Pay lower collateral as your Trust Score increases</li>
+                      <li>
+                        Build your Trust Score through positive interactions
+                      </li>
+                      <li>
+                        Pay lower collateral as your Trust Score increases
+                      </li>
                       <li>Experience authentic local cultures worldwide</li>
                     </ul>
                   </div>
@@ -85,19 +112,35 @@ export default function SignUpPage() {
                   <div className="space-y-4">
                     <h3 className="font-medium">As a Host, you can:</h3>
                     <ul className="ml-6 list-disc space-y-2 text-muted-foreground">
-                      <li>List your space and welcome travelers from around the world</li>
+                      <li>
+                        List your space and welcome travelers from around the
+                        world
+                      </li>
                       <li>Set your own availability and house rules</li>
-                      <li>Require minimum Trust Scores for booking eligibility</li>
-                      <li>Build your Trust Score through positive hosting experiences</li>
+                      <li>
+                        Require minimum Trust Scores for booking eligibility
+                      </li>
+                      <li>
+                        Build your Trust Score through positive hosting
+                        experiences
+                      </li>
                     </ul>
-                  </TabsContent>
+                  </div>
+                </TabsContent>
                 <TabsContent value="both" className="mt-4">
                   <div className="space-y-4">
-                    <h3 className="font-medium">As both a Surfer and Host, you can:</h3>
+                    <h3 className="font-medium">
+                      As both a Surfer and Host, you can:
+                    </h3>
                     <ul className="ml-6 list-disc space-y-2 text-muted-foreground">
                       <li>Enjoy all the benefits of both account types</li>
-                      <li>Build your Trust Score faster through both hosting and traveling</li>
-                      <li>Create a more well-rounded profile in the community</li>
+                      <li>
+                        Build your Trust Score faster through both hosting and
+                        traveling
+                      </li>
+                      <li>
+                        Create a more well-rounded profile in the community
+                      </li>
                       <li>Switch between hosting and traveling seamlessly</li>
                     </ul>
                   </div>
@@ -115,7 +158,9 @@ export default function SignUpPage() {
 
           {step === 3 && (
             <div>
-              <h2 className="mb-4 text-xl font-semibold">Complete Your Profile</h2>
+              <h2 className="mb-4 text-xl font-semibold">
+                Complete Your Profile
+              </h2>
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="name">Full Name</Label>
@@ -123,7 +168,11 @@ export default function SignUpPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="you@example.com" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                  />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="bio">Bio</Label>
@@ -159,7 +208,10 @@ export default function SignUpPage() {
           </div>
           <div className="text-sm">
             Already have an account?{" "}
-            <Link href="/signin" className="font-medium text-primary hover:underline">
+            <Link
+              href="/signin"
+              className="font-medium text-primary hover:underline"
+            >
               Sign in
             </Link>
           </div>
@@ -169,10 +221,11 @@ export default function SignUpPage() {
       <Separator className="my-12" />
 
       <div>
-        <h2 className="mb-6 text-center text-2xl font-bold">Understanding the Trust Score System</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold">
+          Understanding the Trust Score System
+        </h2>
         <TrustScoreExplainer />
       </div>
     </div>
-  )
+  );
 }
-

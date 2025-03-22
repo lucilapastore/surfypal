@@ -1,6 +1,14 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
-import type { User, Listing, Booking, Review, SignUpData, BookingData, ListingData } from "@/types"
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type {
+  User,
+  Listing,
+  Booking,
+  Review,
+  SignUpData,
+  BookingData,
+  ListingData,
+} from "@/types";
 import {
   getUser,
   getUserListings,
@@ -12,34 +20,35 @@ import {
   mockCancelBooking,
   mockDeleteListing,
   mockCreateListing,
-} from "@/lib/api"
+} from "@/lib/api";
 
 interface SurfyPalState {
   // User state
-  currentUser: User | null
-  userListings: Listing[]
+  currentUser: User | null;
+  userListings: Listing[];
   userBookings: {
-    upcoming: Booking[]
-    past: Booking[]
-    cancelled: Booking[]
-  }
+    upcoming: Booking[];
+    past: Booking[];
+    cancelled: Booking[];
+  };
   userReviews: {
-    received: Review[]
-    given: Review[]
-  }
+    received: Review[];
+    given: Review[];
+  };
 
   // Actions
-  signUp: (data: SignUpData) => Promise<void>
-  signIn: () => Promise<void>
-  signOut: () => void
-  createBooking: (data: BookingData) => Promise<void>
-  cancelBooking: (id: string) => Promise<void>
-  createListing: (data: ListingData) => Promise<Listing>
-  deleteListing: (id: string) => Promise<void>
+  signUp: (data: SignUpData) => Promise<void>;
+  signIn: () => Promise<void>;
+  signOut: () => void;
+  createBooking: (data: BookingData) => Promise<void>;
+  cancelBooking: (id: string) => Promise<void>;
+  createListing: (data: ListingData) => Promise<Listing>;
+  deleteListing: (id: string) => Promise<void>;
+  loadUserData: (userId: string) => Promise<void>;
 
   // UI state
-  isLoading: boolean
-  setIsLoading: (loading: boolean) => void
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
 }
 
 export const useSurfyPalStore = create<SurfyPalState>()(
@@ -63,30 +72,30 @@ export const useSurfyPalStore = create<SurfyPalState>()(
       setIsLoading: (loading) => set({ isLoading: loading }),
 
       signUp: async (data) => {
-        set({ isLoading: true })
+        set({ isLoading: true });
         try {
-          const user = await mockSignUp(data)
-          set({ currentUser: user })
-          await get().loadUserData(user.id)
+          const user = await mockSignUp(data);
+          set({ currentUser: user });
+          await get().loadUserData(user.id);
         } catch (error) {
-          console.error("Failed to sign up:", error)
-          throw error
+          console.error("Failed to sign up:", error);
+          throw error;
         } finally {
-          set({ isLoading: false })
+          set({ isLoading: false });
         }
       },
 
       signIn: async () => {
-        set({ isLoading: true })
+        set({ isLoading: true });
         try {
-          const user = await mockSignIn()
-          set({ currentUser: user })
-          await get().loadUserData(user.id)
+          const user = await mockSignIn();
+          set({ currentUser: user });
+          await get().loadUserData(user.id);
         } catch (error) {
-          console.error("Failed to sign in:", error)
-          throw error
+          console.error("Failed to sign in:", error);
+          throw error;
         } finally {
-          set({ isLoading: false })
+          set({ isLoading: false });
         }
       },
 
@@ -103,119 +112,127 @@ export const useSurfyPalStore = create<SurfyPalState>()(
             received: [],
             given: [],
           },
-        })
+        });
       },
 
       createBooking: async (data) => {
-        set({ isLoading: true })
+        set({ isLoading: true });
         try {
-          const booking = await mockCreateBooking(data)
+          const booking = await mockCreateBooking(data);
           set((state) => ({
             userBookings: {
               ...state.userBookings,
               upcoming: [...state.userBookings.upcoming, booking],
             },
-          }))
+          }));
         } catch (error) {
-          console.error("Failed to create booking:", error)
-          throw error
+          console.error("Failed to create booking:", error);
+          throw error;
         } finally {
-          set({ isLoading: false })
+          set({ isLoading: false });
         }
       },
 
       cancelBooking: async (id) => {
-        set({ isLoading: true })
+        set({ isLoading: true });
         try {
-          await mockCancelBooking(id)
+          await mockCancelBooking(id);
 
           set((state) => {
-            const booking = state.userBookings.upcoming.find((b) => b.id === id)
-            if (!booking) return state
+            const booking = state.userBookings.upcoming.find(
+              (b) => b.id === id
+            );
+            if (!booking) return state;
 
             return {
               userBookings: {
                 ...state.userBookings,
-                upcoming: state.userBookings.upcoming.filter((b) => b.id !== id),
-                cancelled: [...state.userBookings.cancelled, { ...booking, status: "cancelled" }],
+                upcoming: state.userBookings.upcoming.filter(
+                  (b) => b.id !== id
+                ),
+                cancelled: [
+                  ...state.userBookings.cancelled,
+                  { ...booking, status: "cancelled" },
+                ],
               },
-            }
-          })
+            };
+          });
         } catch (error) {
-          console.error("Failed to cancel booking:", error)
-          throw error
+          console.error("Failed to cancel booking:", error);
+          throw error;
         } finally {
-          set({ isLoading: false })
+          set({ isLoading: false });
         }
       },
 
       createListing: async (data) => {
-        set({ isLoading: true })
+        set({ isLoading: true });
         try {
-          const newListing = await mockCreateListing(data)
+          const newListing = await mockCreateListing(data);
           set((state) => ({
             userListings: [...state.userListings, newListing],
-          }))
-          return newListing
+          }));
+          return newListing;
         } catch (error) {
-          console.error("Failed to create listing:", error)
-          throw error
+          console.error("Failed to create listing:", error);
+          throw error;
         } finally {
-          set({ isLoading: false })
+          set({ isLoading: false });
         }
       },
 
       deleteListing: async (id) => {
-        set({ isLoading: true })
+        set({ isLoading: true });
         try {
-          await mockDeleteListing(id)
+          await mockDeleteListing(id);
           set((state) => ({
-            userListings: state.userListings.filter((listing) => listing.id !== id),
-          }))
+            userListings: state.userListings.filter(
+              (listing) => listing.id !== id
+            ),
+          }));
         } catch (error) {
-          console.error("Failed to delete listing:", error)
-          throw error
+          console.error("Failed to delete listing:", error);
+          throw error;
         } finally {
-          set({ isLoading: false })
+          set({ isLoading: false });
         }
       },
 
       // Helper function to load user data
       loadUserData: async (userId: string) => {
         try {
-          const user = await getUser(userId)
-          set({ currentUser: user })
+          const user = await getUser(userId);
+          set({ currentUser: user });
 
           if (user) {
             const [listings, bookings, reviews] = await Promise.all([
               getUserListings(userId),
               getUserBookings(userId),
               getUserReviews(userId),
-            ])
+            ]);
 
             set({
               userListings: listings,
               userBookings: bookings,
               userReviews: reviews,
-            })
+            });
           }
         } catch (error) {
-          console.error("Failed to load user data:", error)
+          console.error("Failed to load user data:", error);
         }
       },
     }),
     {
       name: "surfypal-storage",
       partialize: (state) => ({ currentUser: state.currentUser }),
-    },
-  ),
-)
+    }
+  )
+);
 
 // Initialize user data if there's a stored user
 if (typeof window !== "undefined") {
-  const { currentUser, loadUserData } = useSurfyPalStore.getState()
+  const { currentUser, loadUserData } = useSurfyPalStore.getState();
   if (currentUser) {
-    loadUserData(currentUser.id)
+    loadUserData(currentUser.id);
   }
 }
-

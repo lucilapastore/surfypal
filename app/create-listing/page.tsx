@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useSurfyPalStore } from "@/lib/store"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Slider } from "@/components/ui/slider"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Separator } from "@/components/ui/separator"
-import { ListingCard } from "@/components/listings/listing-card"
-import type { Listing, ListingData } from "@/types"
-import { PlusCircle, Loader2 } from "lucide-react"
-import Image from "next/image"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSurfyPalStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import { ListingCard } from "@/components/listings/listing-card";
+import type { Listing, ListingData } from "@/types";
+import { PlusCircle, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 const AMENITIES = [
   "Wifi",
@@ -31,11 +31,11 @@ const AMENITIES = [
   "Fireplace",
   "Garden",
   "Unique experience",
-]
+];
 
 export default function CreateListingPage() {
-  const router = useRouter()
-  const { currentUser, createListing, isLoading } = useSurfyPalStore()
+  const router = useRouter();
+  const { currentUser, createListing, isLoading } = useSurfyPalStore();
   const [formData, setFormData] = useState<ListingData>({
     title: "",
     description: "",
@@ -51,75 +51,77 @@ export default function CreateListingPage() {
     bathrooms: 1,
     amenities: ["Wifi", "Kitchen"],
     minTrustScore: 50,
-  })
+  });
 
-  const [previewListing, setPreviewListing] = useState<Listing | null>(null)
+  const [previewListing, setPreviewListing] = useState<Listing | null>(null);
 
   // Redirect if not logged in
   if (typeof window !== "undefined" && !currentUser) {
-    router.push("/signin")
-    return null
+    router.push("/signin");
+    return null;
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
 
     if (name.includes(".")) {
-      const [parent, child] = name.split(".")
+      const [parent, child] = name.split(".");
       setFormData({
         ...formData,
         [parent]: {
-          ...formData[parent as keyof ListingData],
+          ...(formData[parent as keyof ListingData] as Record<string, any>),
           [child]: value,
         },
-      })
+      });
     } else {
       setFormData({
         ...formData,
         [name]: value,
-      })
+      });
     }
-  }
+  };
 
   const handleNumberChange = (name: string, value: number) => {
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleImageChange = (index: number, value: string) => {
-    const newImages = [...formData.images]
-    newImages[index] = value
+    const newImages = [...formData.images];
+    newImages[index] = value;
     setFormData({
       ...formData,
       images: newImages,
-    })
-  }
+    });
+  };
 
   const addImageField = () => {
     setFormData({
       ...formData,
       images: [...formData.images, ""],
-    })
-  }
+    });
+  };
 
   const handleAmenityToggle = (amenity: string, checked: boolean) => {
     if (checked) {
       setFormData({
         ...formData,
         amenities: [...formData.amenities, amenity],
-      })
+      });
     } else {
       setFormData({
         ...formData,
         amenities: formData.amenities.filter((a) => a !== amenity),
-      })
+      });
     }
-  }
+  };
 
   const generatePreview = () => {
-    if (!currentUser) return
+    if (!currentUser) return;
 
     // Create a preview listing
     const preview: Listing = {
@@ -134,29 +136,32 @@ export default function CreateListingPage() {
       rating: 0,
       reviewCount: 0,
       featured: false,
-    }
+    };
 
-    setPreviewListing(preview)
-  }
+    setPreviewListing(preview);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      const newListing = await createListing(formData)
-      console.log("Created new listing:", newListing) // Add this debug log
-      router.push(`/listings/${newListing.id}`)
+      const newListing = await createListing(formData);
+      console.log("Created new listing:", newListing); // Add this debug log
+      router.push(`/listings/${newListing.id}`);
     } catch (error) {
-      console.error("Failed to create listing:", error)
+      console.error("Failed to create listing:", error);
     }
-  }
+  };
 
   return (
     <div>
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold tracking-tight">Create a New Listing</h1>
+        <h1 className="mb-2 text-3xl font-bold tracking-tight">
+          Create a New Listing
+        </h1>
         <p className="text-muted-foreground">
-          Share your space with travelers and earn from your property while building your Trust Score.
+          Share your space with travelers and earn from your property while
+          building your Trust Score.
         </p>
       </div>
 
@@ -203,7 +208,9 @@ export default function CreateListingPage() {
                     onChange={handleInputChange}
                     required
                   />
-                  <div className="text-sm text-muted-foreground">${formData.price}/night</div>
+                  <div className="text-sm text-muted-foreground">
+                    ${formData.price}/night
+                  </div>
                 </div>
               </div>
             </div>
@@ -267,10 +274,13 @@ export default function CreateListingPage() {
                     min={1}
                     max={16}
                     step={1}
-                    onValueChange={(value) => handleNumberChange("capacity", value[0])}
+                    onValueChange={(value) =>
+                      handleNumberChange("capacity", value[0])
+                    }
                   />
                   <div className="text-center text-sm font-medium">
-                    {formData.capacity} {formData.capacity === 1 ? "guest" : "guests"}
+                    {formData.capacity}{" "}
+                    {formData.capacity === 1 ? "guest" : "guests"}
                   </div>
                 </div>
 
@@ -285,10 +295,13 @@ export default function CreateListingPage() {
                     min={1}
                     max={10}
                     step={1}
-                    onValueChange={(value) => handleNumberChange("bedrooms", value[0])}
+                    onValueChange={(value) =>
+                      handleNumberChange("bedrooms", value[0])
+                    }
                   />
                   <div className="text-center text-sm font-medium">
-                    {formData.bedrooms} {formData.bedrooms === 1 ? "bedroom" : "bedrooms"}
+                    {formData.bedrooms}{" "}
+                    {formData.bedrooms === 1 ? "bedroom" : "bedrooms"}
                   </div>
                 </div>
 
@@ -303,10 +316,13 @@ export default function CreateListingPage() {
                     min={1}
                     max={10}
                     step={0.5}
-                    onValueChange={(value) => handleNumberChange("bathrooms", value[0])}
+                    onValueChange={(value) =>
+                      handleNumberChange("bathrooms", value[0])
+                    }
                   />
                   <div className="text-center text-sm font-medium">
-                    {formData.bathrooms} {formData.bathrooms === 1 ? "bathroom" : "bathrooms"}
+                    {formData.bathrooms}{" "}
+                    {formData.bathrooms === 1 ? "bathroom" : "bathrooms"}
                   </div>
                 </div>
               </div>
@@ -317,7 +333,8 @@ export default function CreateListingPage() {
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Images</h2>
               <p className="text-sm text-muted-foreground">
-                Add images of your property. You can provide URLs to existing images.
+                Add images of your property. You can provide URLs to existing
+                images.
               </p>
 
               <div className="space-y-2">
@@ -328,11 +345,21 @@ export default function CreateListingPage() {
                       onChange={(e) => handleImageChange(index, e.target.value)}
                       placeholder="Image URL (e.g., https://example.com/image.jpg)"
                     />
-                    {index === 0 && <div className="text-xs text-muted-foreground flex items-center">Main image</div>}
+                    {index === 0 && (
+                      <div className="text-xs text-muted-foreground flex items-center">
+                        Main image
+                      </div>
+                    )}
                   </div>
                 ))}
 
-                <Button type="button" variant="outline" size="sm" onClick={addImageField} className="mt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addImageField}
+                  className="mt-2"
+                >
                   <PlusCircle className="mr-2 h-4 w-4" />
                   Add Another Image
                 </Button>
@@ -341,14 +368,18 @@ export default function CreateListingPage() {
               {formData.images[0] && (
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
                   {formData.images.filter(Boolean).map((image, index) => (
-                    <div key={index} className="relative aspect-square overflow-hidden rounded-md border">
+                    <div
+                      key={index}
+                      className="relative aspect-square overflow-hidden rounded-md border"
+                    >
                       <Image
                         src={image || "/placeholder.svg"}
                         alt={`Property image ${index + 1}`}
                         fill
                         className="object-cover"
                         onError={(e) => {
-                          ;(e.target as HTMLImageElement).src = "/placeholder.svg?height=200&width=200"
+                          (e.target as HTMLImageElement).src =
+                            "/placeholder.svg?height=200&width=200";
                         }}
                       />
                     </div>
@@ -367,7 +398,9 @@ export default function CreateListingPage() {
                     <Checkbox
                       id={`amenity-${amenity}`}
                       checked={formData.amenities.includes(amenity)}
-                      onCheckedChange={(checked) => handleAmenityToggle(amenity, checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        handleAmenityToggle(amenity, checked as boolean)
+                      }
                     />
                     <Label htmlFor={`amenity-${amenity}`} className="text-sm">
                       {amenity}
@@ -380,7 +413,9 @@ export default function CreateListingPage() {
             <Separator />
 
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Trust Score Requirements</h2>
+              <h2 className="text-xl font-semibold">
+                Trust Score Requirements
+              </h2>
               <div className="space-y-2">
                 <Label>Minimum Trust Score for Booking</Label>
                 <div className="flex items-center justify-between">
@@ -392,11 +427,16 @@ export default function CreateListingPage() {
                   min={0}
                   max={100}
                   step={5}
-                  onValueChange={(value) => handleNumberChange("minTrustScore", value[0])}
+                  onValueChange={(value) =>
+                    handleNumberChange("minTrustScore", value[0])
+                  }
                 />
-                <div className="text-center text-sm font-medium">{formData.minTrustScore} points minimum</div>
+                <div className="text-center text-sm font-medium">
+                  {formData.minTrustScore} points minimum
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  Setting a higher minimum Trust Score can reduce booking risks but may limit your potential guests.
+                  Setting a higher minimum Trust Score can reduce booking risks
+                  but may limit your potential guests.
                 </p>
               </div>
             </div>
@@ -427,9 +467,12 @@ export default function CreateListingPage() {
             <Card>
               <CardContent className="flex h-[400px] items-center justify-center p-6 text-center">
                 <div>
-                  <p className="mb-2 text-lg font-medium">No preview available</p>
+                  <p className="mb-2 text-lg font-medium">
+                    No preview available
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    Fill out the form and click "Preview Listing" to see how your listing will appear to guests.
+                    Fill out the form and click "Preview Listing" to see how
+                    your listing will appear to guests.
                   </p>
                 </div>
               </CardContent>
@@ -438,6 +481,5 @@ export default function CreateListingPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
