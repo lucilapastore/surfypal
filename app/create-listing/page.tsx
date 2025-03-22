@@ -152,7 +152,7 @@ export default function CreateListingPage() {
   }
 
   return (
-    <div className="container py-8 px-4 md:px-6 lg:px-8">
+    <div>
       <div className="mb-8">
         <h1 className="mb-2 text-3xl font-bold tracking-tight">Create a New Listing</h1>
         <p className="text-muted-foreground">

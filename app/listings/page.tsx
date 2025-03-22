@@ -13,7 +13,7 @@ export default function ListingsPage() {
   const { listings, filters, setFilters } = useListings()
 
   return (
-    <div className="container py-8 px-4 md:px-6 lg:px-8">
+    <div>
       <div className="mb-8">
         <h1 className="mb-2 text-3xl font-bold tracking-tight">Find Trusted Local Stays</h1>
         <p className="text-muted-foreground">
@@ -30,7 +30,7 @@ export default function ListingsPage() {
             variant={viewMode === "grid" ? "default" : "outline"}
             size="sm"
             onClick={() => setViewMode("grid")}
-            className="w-10 h-10 p-0"
+            className="h-10 w-10 p-0"
           >
             <GridIcon className="h-4 w-4" />
             <span className="sr-only">Grid view</span>
@@ -39,7 +39,7 @@ export default function ListingsPage() {
             variant={viewMode === "map" ? "default" : "outline"}
             size="sm"
             onClick={() => setViewMode("map")}
-            className="w-10 h-10 p-0"
+            className="h-10 w-10 p-0"
           >
             <MapIcon className="h-4 w-4" />
             <span className="sr-only">Map view</span>

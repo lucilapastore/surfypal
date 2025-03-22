@@ -30,7 +30,7 @@ export default function ListingDetailPage() {
 
   if (!listing) {
     return (
-      <div className="container py-16 text-center px-4 md:px-6 lg:px-8">
+      <div className="text-center">
         <h1 className="text-2xl font-bold">Listing not found</h1>
         <p className="mt-4 text-muted-foreground">The listing you're looking for doesn't exist or has been removed.</p>
         <Button asChild className="mt-8">
@@ -41,7 +41,7 @@ export default function ListingDetailPage() {
   }
 
   return (
-    <div className="container py-8 px-4 md:px-6 lg:px-8">
+    <div>
       <h1 className="mb-4 text-3xl font-bold tracking-tight">{listing.title}</h1>
 
       <div className="mb-6 flex flex-wrap items-center gap-4">

@@ -6,7 +6,7 @@ import { Facebook, Instagram, Twitter } from "lucide-react"
 export default function Footer() {
   return (
     <footer className="border-t bg-muted/40">
-      <div className="container py-10">
+      <div className="container mx-auto py-10">
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
           <div className="md:col-span-2">
             <Link href="/" className="mb-4 inline-block text-lg font-bold">

@@ -29,7 +29,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container py-8 px-4 md:px-6 lg:px-8">
+    <div>
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>

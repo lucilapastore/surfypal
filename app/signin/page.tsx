@@ -17,7 +17,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="container flex items-center justify-center py-16 px-4 md:px-6 lg:px-8">
+    <div className="flex items-center justify-center">
       <Card className="mx-auto w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Welcome Back</CardTitle>

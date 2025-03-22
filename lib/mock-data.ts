@@ -1,4 +1,4 @@
-import type { User, Listing, Review, Booking } from "@/types"
+import type { User, Listing, Review, Booking } from "@/types";
 
 // Mock Users
 export const mockUsers: User[] = [
@@ -62,7 +62,7 @@ export const mockUsers: User[] = [
     isSuperhost: true,
     userType: "host",
   },
-]
+];
 
 // Mock Listings
 export const mockListings: Listing[] = [
@@ -73,11 +73,11 @@ export const mockListings: Listing[] = [
       "Experience city living in this modern apartment located in the heart of downtown. Walking distance to restaurants, shops, and public transportation.",
     price: 120,
     images: [
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
+      "https://a0.muscache.com/im/pictures/66218abc-988b-4442-9c28-cb6a1952fbf3.jpg?im_w=720",
+      "https://a0.muscache.com/im/pictures/100714692/0b3d03a3_original.jpg?im_w=720",
+      "https://a0.muscache.com/im/pictures/100714449/64c53048_original.jpg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-6760181/original/d031288a-9d30-4773-885b-ede19650fc35.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-6760181/original/28702f03-97f3-4618-abdc-bbf8c37a2cc9.jpeg?im_w=720",
     ],
     location: {
       city: "San Francisco",
@@ -97,7 +97,14 @@ export const mockListings: Listing[] = [
     capacity: 4,
     bedrooms: 2,
     bathrooms: 1,
-    amenities: ["Wifi", "Kitchen", "Air conditioning", "Heating", "TV", "Coffee maker"],
+    amenities: [
+      "Wifi",
+      "Kitchen",
+      "Air conditioning",
+      "Heating",
+      "TV",
+      "Coffee maker",
+    ],
     rating: 4.8,
     reviewCount: 24,
     minTrustScore: 50,
@@ -110,11 +117,11 @@ export const mockListings: Listing[] = [
       "Wake up to stunning ocean views in this beautiful beachfront villa. Perfect for a relaxing getaway with direct beach access and a private pool.",
     price: 350,
     images: [
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/7a0bbe51-2e52-4100-8050-ddf20d9f9c0c.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/489a4f93-fef0-48aa-80de-a09ef9b78364.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/b439a068-04ef-4aa9-a8d5-6072aa8d1e0b.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/136d5037-fbe1-43d6-bf14-ed8c784a9983.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/3647b707-6510-4031-af56-e6c7a3dde7d7.jpeg?im_w=720",
     ],
     location: {
       city: "Barcelona",
@@ -134,7 +141,15 @@ export const mockListings: Listing[] = [
     capacity: 8,
     bedrooms: 4,
     bathrooms: 3,
-    amenities: ["Wifi", "Pool", "Kitchen", "Air conditioning", "Heating", "TV", "Free parking"],
+    amenities: [
+      "Wifi",
+      "Pool",
+      "Kitchen",
+      "Air conditioning",
+      "Heating",
+      "TV",
+      "Free parking",
+    ],
     rating: 4.9,
     reviewCount: 36,
     minTrustScore: 70,
@@ -147,11 +162,11 @@ export const mockListings: Listing[] = [
       "Stay in a beautifully preserved traditional home in the heart of the historic district. Experience authentic local culture and architecture.",
     price: 180,
     images: [
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-46677436/original/bde5a123-9e69-49a1-b633-d96735350e20.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-46677436/original/9d2d984e-a5ae-4115-a55f-faca136986fc.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-46677436/original/1f3ce2a2-c269-42e4-ab4b-d9671bd65f28.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-46677436/original/6c068f91-2700-49bd-8356-335320a0c518.jpeg?im_w=720",
+      "https://a0.muscache.com/im/pictures/miso/Hosting-46677436/original/4a2d843c-62bd-4a94-8c25-35a5c822a851.jpeg?im_w=720",
     ],
     location: {
       city: "Kyoto",
@@ -184,11 +199,11 @@ export const mockListings: Listing[] = [
       "Stay in this stylish loft apartment in the heart of the tech district. Perfect for digital nomads with high-speed internet and a dedicated workspace.",
     price: 150,
     images: [
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEyMTE0NjM4NzQ5NDgxNTM4Mg==/original/c84a251e-ae33-4796-b322-6e79ce12b4a3.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEyMTE0NjM4NzQ5NDgxNTM4Mg==/original/9973c645-c173-4d8f-9ee4-ff9645eb8b5b.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEyMTE0NjM4NzQ5NDgxNTM4Mg==/original/b0f130c5-ac6a-41d2-b516-1518f20ec7f4.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEyMTE0NjM4NzQ5NDgxNTM4Mg==/original/d32a0c66-633a-4b8f-9b8c-e7bf953f0030.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEyMTE0NjM4NzQ5NDgxNTM4Mg==/original/5bcb8cef-6284-41ff-ac69-ab2dc7226707.jpeg?im_w=720",
     ],
     location: {
       city: "Seoul",
@@ -208,7 +223,14 @@ export const mockListings: Listing[] = [
     capacity: 2,
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wifi", "Kitchen", "Air conditioning", "Heating", "TV", "Workspace"],
+    amenities: [
+      "Wifi",
+      "Kitchen",
+      "Air conditioning",
+      "Heating",
+      "TV",
+      "Workspace",
+    ],
     rating: 4.6,
     reviewCount: 15,
     minTrustScore: 50,
@@ -221,11 +243,11 @@ export const mockListings: Listing[] = [
       "Escape the city in this peaceful cottage surrounded by nature. Enjoy hiking trails, fresh air, and stargazing at night.",
     price: 200,
     images: [
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/miso/Hosting-44113492/original/956a12e0-d7ad-4a0f-b051-5a39cde69df0.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/miso/Hosting-44113492/original/ef421b24-d432-410d-aca2-827e143fbe62.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/miso/Hosting-44113492/original/37507257-46be-4496-bf9d-1bbe77d4bbf4.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/miso/Hosting-44113492/original/ddedb6cb-d538-4895-a76d-250292c10e25.jpeg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/miso/Hosting-44113492/original/07012049-fc93-4862-be33-eb520226d361.jpeg?im_w=720",
     ],
     location: {
       city: "Cotswolds",
@@ -245,7 +267,14 @@ export const mockListings: Listing[] = [
     capacity: 4,
     bedrooms: 2,
     bathrooms: 1,
-    amenities: ["Wifi", "Kitchen", "Heating", "Free parking", "Garden", "Fireplace"],
+    amenities: [
+      "Wifi",
+      "Kitchen",
+      "Heating",
+      "Free parking",
+      "Garden",
+      "Fireplace",
+    ],
     rating: 4.9,
     reviewCount: 22,
     minTrustScore: 65,
@@ -258,11 +287,11 @@ export const mockListings: Listing[] = [
       "A unique treehouse experience in the middle of the city. Enjoy the best of both worlds with nature and urban convenience.",
     price: 220,
     images: [
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
-      "/placeholder.svg?height=600&width=800",
+      "https://a0.muscache.com/im/pictures/a896028e-a95e-44e0-bc7d-d21f13898b25.jpg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/7d972ba5-1ea8-48e2-a646-793e68fe0129.jpg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/c85da145-7f47-4b3e-b495-eddeaaffd5f7.jpg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/f7fd4341-2a4e-4df7-b8f7-8bcf1156a886.jpg?im_w=720",
+      "https://a0.muscache.com/im/ml/photo_enhancement/pictures/cfdc0fd1-a062-49e4-b0e1-5f71c54c62e5.jpg?im_w=720",
     ],
     location: {
       city: "Portland",
@@ -282,13 +311,20 @@ export const mockListings: Listing[] = [
     capacity: 2,
     bedrooms: 1,
     bathrooms: 1,
-    amenities: ["Wifi", "Kitchen", "Heating", "Air conditioning", "TV", "Unique experience"],
+    amenities: [
+      "Wifi",
+      "Kitchen",
+      "Heating",
+      "Air conditioning",
+      "TV",
+      "Unique experience",
+    ],
     rating: 4.8,
     reviewCount: 19,
     minTrustScore: 55,
     featured: false,
   },
-]
+];
 
 // Mock Reviews
 export const mockReviews: Review[] = [
@@ -382,13 +418,13 @@ export const mockReviews: Review[] = [
       "This cottage is a perfect countryside retreat! We loved the peaceful surroundings, beautiful garden, and cozy interior. The fireplace made evenings special, and the kitchen was well-equipped for cooking. Raj provided excellent hiking recommendations and was a thoughtful host. We're already planning our return visit!",
     date: "September 10, 2023",
   },
-]
+];
 
 // Mock Bookings
 export const mockBookings: {
-  upcoming: Booking[]
-  past: Booking[]
-  cancelled: Booking[]
+  upcoming: Booking[];
+  past: Booking[];
+  cancelled: Booking[];
 } = {
   upcoming: [
     {
@@ -400,7 +436,9 @@ export const mockBookings: {
           city: "Barcelona",
           country: "Spain",
         },
-        images: ["/placeholder.svg?height=600&width=800"],
+        images: [
+          "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/7a0bbe51-2e52-4100-8050-ddf20d9f9c0c.jpeg?im_w=720",
+        ],
         price: 350,
       },
       host: {
@@ -425,7 +463,9 @@ export const mockBookings: {
           city: "Cotswolds",
           country: "United Kingdom",
         },
-        images: ["/placeholder.svg?height=600&width=800"],
+        images: [
+          "https://a0.muscache.com/im/ml/photo_enhancement/pictures/miso/Hosting-44113492/original/956a12e0-d7ad-4a0f-b051-5a39cde69df0.jpeg?im_w=720",
+        ],
         price: 200,
       },
       host: {
@@ -452,7 +492,9 @@ export const mockBookings: {
           city: "San Francisco",
           country: "USA",
         },
-        images: ["/placeholder.svg?height=600&width=800"],
+        images: [
+          "https://a0.muscache.com/im/pictures/66218abc-988b-4442-9c28-cb6a1952fbf3.jpg?im_w=720",
+        ],
         price: 120,
       },
       host: {
@@ -477,7 +519,9 @@ export const mockBookings: {
           city: "Kyoto",
           country: "Japan",
         },
-        images: ["/placeholder.svg?height=600&width=800"],
+        images: [
+          "https://a0.muscache.com/im/pictures/miso/Hosting-46677436/original/bde5a123-9e69-49a1-b633-d96735350e20.jpeg?im_w=720",
+        ],
         price: 180,
       },
       host: {
@@ -504,7 +548,9 @@ export const mockBookings: {
           city: "Seoul",
           country: "South Korea",
         },
-        images: ["/placeholder.svg?height=600&width=800"],
+        images: [
+          "https://a0.muscache.com/im/ml/photo_enhancement/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEyMTE0NjM4NzQ5NDgxNTM4Mg==/original/c84a251e-ae33-4796-b322-6e79ce12b4a3.jpeg?im_w=720",
+        ],
         price: 150,
       },
       host: {
@@ -521,42 +567,44 @@ export const mockBookings: {
       reviewed: false,
     },
   ],
-}
+};
 
 // Helper functions for mock data
 export function getFeaturedListings(): Promise<Listing[]> {
-  return Promise.resolve(mockListings.filter((listing) => listing.featured))
+  return Promise.resolve(mockListings.filter((listing) => listing.featured));
 }
 
 export function getListingReviews(listingId: string): Promise<Review[]> {
-  return Promise.resolve(mockReviews.filter((review) => review.listingId === listingId))
+  return Promise.resolve(
+    mockReviews.filter((review) => review.listingId === listingId)
+  );
 }
 
 export function getTrustScoreHistory(userId: string): Promise<any[]> {
   // Generate mock trust score history
-  const user = mockUsers.find((u) => u.id === userId)
-  if (!user) return Promise.resolve([])
+  const user = mockUsers.find((u) => u.id === userId);
+  if (!user) return Promise.resolve([]);
 
-  const currentScore = user.trustScore
-  const history = []
+  const currentScore = user.trustScore;
+  const history = [];
 
   // Generate data points for the last 12 months
-  const now = new Date()
-  let score = Math.max(currentScore - 25, 40) // Start lower than current
+  const now = new Date();
+  let score = Math.max(currentScore - 25, 40); // Start lower than current
 
   for (let i = 11; i >= 0; i--) {
-    const date = new Date(now)
-    date.setMonth(date.getMonth() - i)
+    const date = new Date(now);
+    date.setMonth(date.getMonth() - i);
 
     // Random increase between 0-5 points
-    const change = Math.floor(Math.random() * 6)
-    score += change
+    const change = Math.floor(Math.random() * 6);
+    score += change;
 
     // Cap at current score
-    if (i === 0) score = currentScore
+    if (i === 0) score = currentScore;
 
     // Add events for significant changes
-    let event = ""
+    let event = "";
     if (change >= 4) {
       const events = [
         "Received 5-star review",
@@ -564,8 +612,8 @@ export function getTrustScoreHistory(userId: string): Promise<any[]> {
         "Hosted successful guest",
         "Identity verification bonus",
         "Prompt response rate bonus",
-      ]
-      event = events[Math.floor(Math.random() * events.length)]
+      ];
+      event = events[Math.floor(Math.random() * events.length)];
     }
 
     history.push({
@@ -573,36 +621,39 @@ export function getTrustScoreHistory(userId: string): Promise<any[]> {
       score: Math.min(score, 100),
       change: change,
       event: event,
-    })
+    });
   }
 
-  return Promise.resolve(history)
+  return Promise.resolve(history);
 }
 
 export function getUserListings(userId: string): Promise<Listing[]> {
-  return Promise.resolve(mockListings.filter((listing) => listing.host.id === userId))
+  return Promise.resolve(
+    mockListings.filter((listing) => listing.host.id === userId)
+  );
 }
 
 export function getUserReviews(userId: string): Promise<{
-  received: Review[]
-  given: Review[]
+  received: Review[];
+  given: Review[];
 }> {
   const received = mockReviews.filter((review) =>
-    mockListings.some((listing) => listing.host.id === userId && listing.id === review.listingId),
-  )
+    mockListings.some(
+      (listing) => listing.host.id === userId && listing.id === review.listingId
+    )
+  );
 
-  const given = mockReviews.filter((review) => review.author.id === userId)
+  const given = mockReviews.filter((review) => review.author.id === userId);
 
-  return Promise.resolve({ received, given })
+  return Promise.resolve({ received, given });
 }
 
 export function getUserBookings(userId: string): Promise<{
-  upcoming: Booking[]
-  past: Booking[]
-  cancelled: Booking[]
+  upcoming: Booking[];
+  past: Booking[];
+  cancelled: Booking[];
 }> {
   // In a real app, we would filter based on the user ID
   // For this mock, we'll just return all bookings
-  return Promise.resolve(mockBookings)
+  return Promise.resolve(mockBookings);
 }
-
