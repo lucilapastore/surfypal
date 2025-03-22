@@ -19,20 +19,31 @@ export const loginDeviceVerifyPayload: VerifyCommandInput = {
   verification_level: VerificationLevel.Device,
 };
 
+interface VerifyResponse {
+  status: number;
+  user?: any;
+  error?: string;
+}
+
 const useWorldCoin = () => {
   const handleVerifyIdKit = async (proof: ISuccessResult, userId: string) => {
     try {
+      if (!proof || !userId) {
+        throw new Error("Missing required verification parameters");
+      }
+
       const res = await verifyWithServer(
         proof,
         IncognitoActions.VERIFY_USER,
         userId
       );
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Verification failed:", errorData);
+      const data: VerifyResponse = await res.json();
+
+      if (!res.ok || data.error) {
+        console.error("Verification failed:", data.error);
         toast.error("Verification failed. Please try again.");
-        throw new Error("Verification failed.");
+        throw new Error(data.error || "Verification failed");
       }
 
       return true;
@@ -49,9 +60,13 @@ const useWorldCoin = () => {
     userId: string
   ) => {
     try {
+      if (!process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID) {
+        throw new Error("World ID app_id is not configured");
+      }
+
       const url = "/api/worldcoin-validation";
 
-      return await fetch(url, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,6 +77,8 @@ const useWorldCoin = () => {
           userId,
         }),
       });
+
+      return response;
     } catch (error) {
       console.error("Error sending verification to server:", error);
       toast.error("Failed to connect to verification server");

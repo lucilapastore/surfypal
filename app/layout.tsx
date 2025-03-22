@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import type React from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            id="eruda-init"
+            strategy="beforeInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  var script = document.createElement('script');
+                  script.src = "//cdn.jsdelivr.net/npm/eruda";
+                  document.body.appendChild(script);
+                  script.onload = function() {
+                    eruda.init();
+                  }
+                })();
+              `,
+            }}
+          />
+        )}
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
