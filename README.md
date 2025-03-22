@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏠 SurfyPal - Decentralized Travel Platform
 
-## Getting Started
+SurfyPal is a Web3-based decentralized travel platform inspired by Couchsurfing that connects travelers ("Surfers") with local Hosts who offer accommodations. Powered by Worldcoin's World ID verification and a blockchain-based Trust Score system, SurfyPal prioritizes user trust, transparency, and meaningful connections.
 
-First, run the development server:
+## 🌟 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+SurfyPal combines the best aspects of traditional travel platforms with blockchain technology to create a secure, trustworthy environment for travelers and hosts. Our platform features:
+
+- 🔐 **World ID Verification**: Secure login and identity verification through World App
+- ⭐ **Trust Score System**: A transparent, blockchain-based reputation system that rewards positive behavior
+- 💰 **Smart Collateral**: Flexible booking deposits based on user Trust Scores
+- 🌍 **Local Experiences**: Connect with verified hosts and experience authentic local culture
+
+## 🎯 Key Features
+
+### 📊 Trust Score System
+
+Our innovative Trust Score formula considers multiple factors:
+
+```
+Trust Score = (Σ(Cleanliness + Communication + Respect + Punctuality + Experience) / 5n) × ln(n + 1) + Bonus - Penalty
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Average ratings across five key aspects
+- Logarithmic scaling based on review count
+- Bonus points for exceptional performance
+- Penalty system for accountability
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🎁 User Benefits
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### 🏡 For Hosts
+- Create and manage property listings
+- Set custom Trust Score requirements
+- Rate and review Surfers
+- Earn higher visibility with good ratings
 
-## Learn More
+#### 🎒 For Surfers
+- Browse verified local accommodations
+- Flexible collateral based on Trust Score
+- Rate and review Hosts
+- Build reputation through positive interactions
 
-To learn more about Next.js, take a look at the following resources:
+### 🏆 Trust Tiers
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 🟢 **Green Tier**: Low collateral (5-10%)
+- 🟡 **Yellow Tier**: Moderate collateral (20%)
+- 🔴 **Red Tier**: High collateral (50%+)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Technology Stack
 
-## Deploy on Vercel
+- 🎨 **Frontend**: Next.js, shadcn, Tailwind CSS
+- ⛓️ **Blockchain**: World App integration, Worldchain
+- 💾 **Storage**: Hybrid on-chain/off-chain architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Getting Started
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Install dependencies:
+````bash
+pnpm install
+````
+
+2. Set up your development environment:
+````bash
+pnpm dev
+````
+
+Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+## 📚 Documentation
+
+For more details about our features and implementation:
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [World ID Integration](https://id.worldcoin.org)
+- [Trust Score System](./docs/trust-score.md)
+
+## 👥 Contributing
+
+We welcome contributions! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+[MIT](LICENSE) © SurfyPal
