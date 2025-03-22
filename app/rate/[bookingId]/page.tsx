@@ -1,11 +1,11 @@
 import { RatingForm } from "@/components/bookings/rating-form";
 
-export default function RatePage({
+export default async function RatePage({
   params,
 }: {
-  params: { bookingId: string };
+  params: Promise<{ bookingId: string }>;
 }) {
-  const { bookingId } = params;
+  const { bookingId } = await params;
 
   return (
     <div className="container max-w-3xl py-10">

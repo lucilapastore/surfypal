@@ -2,21 +2,22 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSurfyPalStore } from "@/lib/store";
+import { ListingCard } from "@/components/listings/listing-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { ListingCard } from "@/components/listings/listing-card";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { useSurfyPalStore } from "@/lib/store";
 import type { Listing, ListingData } from "@/types";
-import { PlusCircle, Loader2 } from "lucide-react";
+import { MiniKit } from "@worldcoin/minikit-js";
+import { Loader2, PlusCircle } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const AMENITIES = [
   "Wifi",
@@ -32,6 +33,16 @@ const AMENITIES = [
   "Garden",
   "Unique experience",
 ];
+
+// Add a function to trigger haptic feedback for successful creation
+const sendSuccessHapticFeedback = () => {
+  if (MiniKit.isInstalled()) {
+    MiniKit.commands.sendHapticFeedback({
+      hapticsType: "notification",
+      style: "success",
+    });
+  }
+};
 
 export default function CreateListingPage() {
   const router = useRouter();
@@ -146,7 +157,11 @@ export default function CreateListingPage() {
 
     try {
       const newListing = await createListing(formData);
-      console.log("Created new listing:", newListing); // Add this debug log
+      console.log("Created new listing:", newListing);
+
+      // Send haptic feedback for successful listing creation
+      sendSuccessHapticFeedback();
+
       router.push(`/listings/${newListing.id}`);
     } catch (error) {
       console.error("Failed to create listing:", error);

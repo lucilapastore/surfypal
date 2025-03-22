@@ -2,9 +2,6 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSurfyPalStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
@@ -16,8 +13,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { useSurfyPalStore } from "@/lib/store";
+import { calculateCollateralAmount, formatCurrency } from "@/lib/utils";
 import type { Listing } from "@/types";
-import { formatCurrency, calculateCollateralAmount } from "@/lib/utils";
+import { MiniKit } from "@worldcoin/minikit-js";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+// Add a function to trigger haptic feedback for successful booking
+const sendSuccessHapticFeedback = () => {
+  if (MiniKit.isInstalled()) {
+    MiniKit.commands.sendHapticFeedback({
+      hapticsType: "notification",
+      style: "success",
+    });
+  }
+};
 
 interface BookingFormProps {
   listing: Listing;
@@ -72,6 +83,9 @@ export function BookingForm({ listing, onCancel }: BookingFormProps) {
         totalPrice,
         collateralAmount,
       });
+
+      // Send haptic feedback for successful booking
+      sendSuccessHapticFeedback();
 
       // Redirect to dashboard
       router.push("/dashboard");
