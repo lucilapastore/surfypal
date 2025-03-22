@@ -1,55 +1,66 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useSurfyPalStore } from "@/lib/store"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import type { Listing } from "@/types"
-import { formatCurrency, calculateCollateralAmount } from "@/lib/utils"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSurfyPalStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import type { Listing } from "@/types";
+import { formatCurrency, calculateCollateralAmount } from "@/lib/utils";
 
 interface BookingFormProps {
-  listing: Listing
-  onCancel: () => void
+  listing: Listing;
+  onCancel: () => void;
 }
 
 export function BookingForm({ listing, onCancel }: BookingFormProps) {
   const [dates, setDates] = useState<{
-    from: Date | undefined
-    to: Date | undefined
+    from: Date | undefined;
+    to: Date | undefined;
   }>({
     from: undefined,
     to: undefined,
-  })
-  const [guests, setGuests] = useState(1)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [guests, setGuests] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { currentUser, createBooking } = useSurfyPalStore()
-  const router = useRouter()
+  const { currentUser, createBooking } = useSurfyPalStore();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!dates.from || !dates.to || !currentUser) {
-      return
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
       // Calculate number of nights
-      const nights = Math.ceil((dates.to.getTime() - dates.from.getTime()) / (1000 * 60 * 60 * 24))
+      const nights = Math.ceil(
+        (dates.to.getTime() - dates.from.getTime()) / (1000 * 60 * 60 * 24)
+      );
 
       // Calculate total price
-      const totalPrice = listing.price * nights
+      const totalPrice = listing.price * nights;
 
       // Calculate collateral amount based on trust score
-      const collateralAmount = calculateCollateralAmount(totalPrice, currentUser.trustScore)
+      const collateralAmount = calculateCollateralAmount(
+        totalPrice,
+        currentUser.trustScore
+      );
 
       // Create booking
       await createBooking({
@@ -60,24 +71,30 @@ export function BookingForm({ listing, onCancel }: BookingFormProps) {
         guests,
         totalPrice,
         collateralAmount,
-      })
+      });
 
       // Redirect to dashboard
-      router.push("/dashboard")
+      router.push("/dashboard");
     } catch (error) {
-      console.error("Failed to create booking:", error)
+      console.error("Failed to create booking:", error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   // Calculate booking details if dates are selected
   const nights =
-    dates.from && dates.to ? Math.ceil((dates.to.getTime() - dates.from.getTime()) / (1000 * 60 * 60 * 24)) : 0
+    dates.from && dates.to
+      ? Math.ceil(
+          (dates.to.getTime() - dates.from.getTime()) / (1000 * 60 * 60 * 24)
+        )
+      : 0;
 
-  const totalPrice = nights * listing.price
+  const totalPrice = nights * listing.price;
 
-  const collateralAmount = currentUser ? calculateCollateralAmount(totalPrice, currentUser.trustScore) : 0
+  const collateralAmount = currentUser
+    ? calculateCollateralAmount(totalPrice, currentUser.trustScore)
+    : 0;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -100,7 +117,10 @@ export function BookingForm({ listing, onCancel }: BookingFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="guests">Guests</Label>
-        <Select value={guests.toString()} onValueChange={(value) => setGuests(Number.parseInt(value))}>
+        <Select
+          value={guests.toString()}
+          onValueChange={(value) => setGuests(Number.parseInt(value))}
+        >
           <SelectTrigger id="guests">
             <SelectValue placeholder="Select number of guests" />
           </SelectTrigger>
@@ -130,7 +150,8 @@ export function BookingForm({ listing, onCancel }: BookingFormProps) {
               <span>{formatCurrency(collateralAmount)}</span>
             </div>
             <div className="text-xs text-muted-foreground">
-              The collateral amount is based on your Trust Score and will be returned after your stay.
+              The collateral amount is based on your Trust Score and will be
+              returned after your stay.
             </div>
           </div>
 
@@ -143,15 +164,23 @@ export function BookingForm({ listing, onCancel }: BookingFormProps) {
         </>
       )}
 
-      <div className="flex gap-2">
-        <Button type="button" variant="outline" className="w-full" onClick={onCancel}>
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={onCancel}
+        >
           Cancel
         </Button>
-        <Button type="submit" className="w-full" disabled={!dates.from || !dates.to || isSubmitting}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={!dates.from || !dates.to || isSubmitting}
+        >
           {isSubmitting ? "Processing..." : "Book Now"}
         </Button>
       </div>
     </form>
-  )
+  );
 }
-
