@@ -1,29 +1,35 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useSurfyPalStore } from "@/lib/store"
-import { formatCurrency } from "@/lib/utils"
-import { CalendarDays, MessageSquare, X } from "lucide-react"
-import Link from "next/link"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSurfyPalStore } from "@/lib/store";
+import { formatCurrency } from "@/lib/utils";
+import { CalendarDays, MessageSquare, X } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export function DashboardBookings() {
-  const { userBookings, cancelBooking } = useSurfyPalStore()
-  const [isCancelling, setIsCancelling] = useState<string | null>(null)
+  const { userBookings, cancelBooking } = useSurfyPalStore();
+  const [isCancelling, setIsCancelling] = useState<string | null>(null);
 
   const handleCancel = async (id: string) => {
-    setIsCancelling(id)
+    setIsCancelling(id);
     try {
-      await cancelBooking(id)
+      await cancelBooking(id);
     } catch (error) {
-      console.error("Failed to cancel booking:", error)
+      console.error("Failed to cancel booking:", error);
     } finally {
-      setIsCancelling(null)
+      setIsCancelling(null);
     }
-  }
+  };
 
   const renderBookings = (bookings: typeof userBookings.upcoming) => {
     if (bookings.length === 0) {
@@ -31,10 +37,12 @@ export function DashboardBookings() {
         <div className="flex h-[200px] items-center justify-center rounded-lg border bg-muted/50">
           <div className="text-center">
             <h3 className="text-lg font-medium">No bookings found</h3>
-            <p className="text-muted-foreground">Browse listings to make a booking</p>
+            <p className="text-muted-foreground">
+              Browse listings to make a booking
+            </p>
           </div>
         </div>
-      )
+      );
     }
 
     return (
@@ -43,17 +51,20 @@ export function DashboardBookings() {
           <Card key={booking.id}>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle className="line-clamp-1">{booking.listing.title}</CardTitle>
+                <CardTitle className="line-clamp-1">
+                  {booking.listing.title}
+                </CardTitle>
                 <Badge
                   variant={
                     booking.status === "confirmed"
                       ? "default"
                       : booking.status === "completed"
-                        ? "outline"
-                        : "destructive"
+                      ? "outline"
+                      : "destructive"
                   }
                 >
-                  {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                  {booking.status.charAt(0).toUpperCase() +
+                    booking.status.slice(1)}
                 </Badge>
               </div>
             </CardHeader>
@@ -67,17 +78,23 @@ export function DashboardBookings() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Total:</span>
-                  <span className="font-medium">{formatCurrency(booking.totalPrice)}</span>
+                  <span className="font-medium">
+                    {formatCurrency(booking.totalPrice)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Collateral:</span>
-                  <span className="font-medium">{formatCurrency(booking.collateralAmount)}</span>
+                  <span className="font-medium">
+                    {formatCurrency(booking.collateralAmount)}
+                  </span>
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex justify-between gap-2">
               <Button asChild variant="outline" size="sm">
-                <Link href={`/listings/${booking.listing.id}`}>View Listing</Link>
+                <Link href={`/listings/${booking.listing.id}`}>
+                  View Listing
+                </Link>
               </Button>
               {booking.status === "confirmed" && (
                 <>
@@ -99,20 +116,32 @@ export function DashboardBookings() {
                   </Button>
                 </>
               )}
-              {booking.status === "completed" && !booking.reviewed && <Button size="sm">Leave Review</Button>}
+              {booking.status === "completed" && !booking.reviewed && (
+                <Button size="sm" asChild>
+                  <Link href={`/rate/${booking.id}`}>
+                    Rate {booking.host.id === "user1" ? "Surfer" : "Host"}
+                  </Link>
+                </Button>
+              )}
             </CardFooter>
           </Card>
         ))}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <Tabs defaultValue="upcoming">
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="upcoming">Upcoming ({userBookings.upcoming.length})</TabsTrigger>
-        <TabsTrigger value="past">Past ({userBookings.past.length})</TabsTrigger>
-        <TabsTrigger value="cancelled">Cancelled ({userBookings.cancelled.length})</TabsTrigger>
+        <TabsTrigger value="upcoming">
+          Upcoming ({userBookings.upcoming.length})
+        </TabsTrigger>
+        <TabsTrigger value="past">
+          Past ({userBookings.past.length})
+        </TabsTrigger>
+        <TabsTrigger value="cancelled">
+          Cancelled ({userBookings.cancelled.length})
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="upcoming" className="mt-6">
         {renderBookings(userBookings.upcoming)}
@@ -124,6 +153,5 @@ export function DashboardBookings() {
         {renderBookings(userBookings.cancelled)}
       </TabsContent>
     </Tabs>
-  )
+  );
 }
-

@@ -1,4 +1,7 @@
-import type { User, Listing, Review, Booking } from "@/types";
+import type { Booking, Listing, Rating, Review, User } from "@/types";
+
+// Simulate API delay
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Mock Users
 export const mockUsers: User[] = [
@@ -569,6 +572,45 @@ export const mockBookings: {
   ],
 };
 
+// Mock Ratings
+export const mockRatings: Rating[] = [
+  {
+    id: "rating1",
+    bookingId: "booking1",
+    userId: "user2", // Host being rated
+    raterId: "user1", // Surfer who submitted the rating
+    criteria: {
+      cleanliness: 5,
+      communication: 4,
+      respect: 5,
+      punctuality: 4,
+      experience: 5,
+    },
+    averageRating: 4.6,
+    comments: "Great host, very welcoming and accommodating!",
+    date: "March 15, 2024",
+    affectedTrustScore: 3,
+  },
+  {
+    id: "rating2",
+    bookingId: "booking2",
+    userId: "user1", // Surfer being rated
+    raterId: "user2", // Host who submitted the rating
+    criteria: {
+      cleanliness: 4,
+      communication: 5,
+      respect: 5,
+      punctuality: 3,
+      experience: 4,
+    },
+    averageRating: 4.2,
+    comments:
+      "Great surfer, left the place clean and followed all house rules.",
+    date: "March 10, 2024",
+    affectedTrustScore: 2,
+  },
+];
+
 // Helper functions for mock data
 export function getFeaturedListings(): Promise<Listing[]> {
   return Promise.resolve(mockListings.filter((listing) => listing.featured));
@@ -656,4 +698,16 @@ export function getUserBookings(userId: string): Promise<{
   // In a real app, we would filter based on the user ID
   // For this mock, we'll just return all bookings
   return Promise.resolve(mockBookings);
+}
+
+// Get user ratings (ratings received by a user)
+export async function getUserRatings(userId: string): Promise<Rating[]> {
+  await delay(500);
+  return mockRatings.filter((rating) => rating.userId === userId);
+}
+
+// Get ratings submitted by a user
+export async function getRatingsByUser(userId: string): Promise<Rating[]> {
+  await delay(500);
+  return mockRatings.filter((rating) => rating.raterId === userId);
 }

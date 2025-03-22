@@ -1,12 +1,13 @@
-import type React from "react"
-import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
-import { SurfyPalProvider } from "@/context/surfypal-context"
-import Header from "@/components/layout/header"
-import Footer from "@/components/layout/footer"
-import "./globals.css"
+import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SurfyPalProvider } from "@/context/surfypal-context";
+import { Inter } from "next/font/google";
+import type React from "react";
+import { Toaster } from "sonner";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "SurfyPal – Stay with Locals, Explore the World",
@@ -14,17 +15,23 @@ export const metadata = {
     "SurfyPal is a decentralized travel platform where you can stay with locals, experience authentic cultures, and connect with a global community. Verified with World ID and powered by blockchain-based Trust Scores, SurfyPal helps you find safe, secure, and trustworthy stays.",
   keywords:
     "Stay with locals, authentic travel, travel community, blockchain travel, trust-based travel, verified Hosts, SurfyPal",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head />
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
           <SurfyPalProvider>
             <div className="flex min-h-screen flex-col">
               <Header />
@@ -36,9 +43,9 @@ export default function RootLayout({
               <Footer />
             </div>
           </SurfyPalProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
-
