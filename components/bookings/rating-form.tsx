@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { getUserBookings, mockSubmitRating, type RatingData } from "@/lib/api";
+import { useSurfyPalStore } from "@/lib/store";
 import type { Booking } from "@/types";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,6 +24,7 @@ interface RatingCriteria {
 
 export function RatingForm({ bookingId }: RatingFormProps) {
   const router = useRouter();
+  const { currentUser } = useSurfyPalStore();
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState("");
   const [bookingData, setBookingData] = useState<{
@@ -44,12 +46,16 @@ export function RatingForm({ bookingId }: RatingFormProps) {
     // Fetch booking data
     const fetchBookingData = async () => {
       try {
+        if (!currentUser) {
+          throw new Error("User not logged in");
+        }
+
         setLoading(true);
         // In a real app, we would fetch the booking data from the API
         // For this mockup, we're using the mock data
 
-        // Get all user bookings
-        const allBookings = await getUserBookings("user1"); // Using user1 as the current user
+        // Get all user bookings - use current user ID
+        const allBookings = await getUserBookings(currentUser.id);
 
         // Find the specific booking
         let booking: Booking | null = null;
@@ -70,16 +76,22 @@ export function RatingForm({ bookingId }: RatingFormProps) {
         }
 
         // Determine if current user is rating a host or a surfer
-        // In a real app, we would get the current user ID from auth
-        const currentUserId = "user1"; // Mock current user
-        const isRatingHost = currentUserId !== booking.host.id; // If current user is not host, they're rating the host
+        const isRatingHost = currentUser.id !== booking.host.id;
 
-        const targetUserId = isRatingHost ? booking.host.id : "surfer_user_id"; // In real app, get surfer ID
+        // If current user is not host, they're rating the host
+        // Otherwise, they're rating the surfer
+        const targetUserId = isRatingHost
+          ? booking.host.id
+          : booking.surfer?.id || "";
         const userType = isRatingHost ? "host" : "surfer";
+
+        if (!targetUserId) {
+          throw new Error("Target user not found");
+        }
 
         setBookingData({
           booking,
-          userId: currentUserId,
+          userId: currentUser.id,
           targetUserId,
           userType,
         });
@@ -131,10 +143,12 @@ export function RatingForm({ bookingId }: RatingFormProps) {
       }
     };
 
-    if (bookingId) {
+    if (bookingId && currentUser) {
       fetchBookingData();
+    } else if (!currentUser) {
+      router.push("/signin");
     }
-  }, [bookingId, router]);
+  }, [bookingId, router, currentUser]);
 
   const handleStarClick = (criteriaIndex: number, starValue: number) => {
     const updatedCriteria = [...criteria];

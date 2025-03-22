@@ -1,26 +1,26 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type {
-  User,
-  Listing,
-  Booking,
-  Review,
-  SignUpData,
-  BookingData,
-  ListingData,
-} from "@/types";
 import {
   getUser,
-  getUserListings,
   getUserBookings,
+  getUserListings,
   getUserReviews,
-  mockSignUp,
-  mockSignIn,
-  mockCreateBooking,
   mockCancelBooking,
-  mockDeleteListing,
+  mockCreateBooking,
   mockCreateListing,
+  mockDeleteListing,
+  mockSignIn,
+  mockSignUp,
 } from "@/lib/api";
+import type {
+  Booking,
+  BookingData,
+  Listing,
+  ListingData,
+  Review,
+  SignUpData,
+  User,
+} from "@/types";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface SurfyPalState {
   // User state
@@ -38,7 +38,7 @@ interface SurfyPalState {
 
   // Actions
   signUp: (data: SignUpData) => Promise<void>;
-  signIn: () => Promise<void>;
+  signIn: (userType?: "host" | "surfer") => Promise<void>;
   signOut: () => void;
   createBooking: (data: BookingData) => Promise<void>;
   cancelBooking: (id: string) => Promise<void>;
@@ -74,6 +74,20 @@ export const useSurfyPalStore = create<SurfyPalState>()(
       signUp: async (data) => {
         set({ isLoading: true });
         try {
+          // Clear any existing state first
+          set({
+            userListings: [],
+            userBookings: {
+              upcoming: [],
+              past: [],
+              cancelled: [],
+            },
+            userReviews: {
+              received: [],
+              given: [],
+            },
+          });
+
           const user = await mockSignUp(data);
           set({ currentUser: user });
           await get().loadUserData(user.id);
@@ -85,10 +99,24 @@ export const useSurfyPalStore = create<SurfyPalState>()(
         }
       },
 
-      signIn: async () => {
+      signIn: async (userType = "host") => {
         set({ isLoading: true });
         try {
-          const user = await mockSignIn();
+          // Clear any existing state first
+          set({
+            userListings: [],
+            userBookings: {
+              upcoming: [],
+              past: [],
+              cancelled: [],
+            },
+            userReviews: {
+              received: [],
+              given: [],
+            },
+          });
+
+          const user = await mockSignIn(userType);
           set({ currentUser: user });
           await get().loadUserData(user.id);
         } catch (error) {
@@ -100,6 +128,7 @@ export const useSurfyPalStore = create<SurfyPalState>()(
       },
 
       signOut: () => {
+        // Clear everything on sign out
         set({
           currentUser: null,
           userListings: [],
@@ -113,6 +142,11 @@ export const useSurfyPalStore = create<SurfyPalState>()(
             given: [],
           },
         });
+
+        // Clear persisted data
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("surfypal-storage");
+        }
       },
 
       createBooking: async (data) => {
@@ -225,14 +259,23 @@ export const useSurfyPalStore = create<SurfyPalState>()(
     {
       name: "surfypal-storage",
       partialize: (state) => ({ currentUser: state.currentUser }),
+      // Add a version to force reset if needed
+      version: 2,
     }
   )
 );
+
+// Clear any stored user on app initialization during development
+if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+  // Uncomment the next line to force reset the storage during development
+  localStorage.removeItem("surfypal-storage");
+}
 
 // Initialize user data if there's a stored user
 if (typeof window !== "undefined") {
   const { currentUser, loadUserData } = useSurfyPalStore.getState();
   if (currentUser) {
+    // Force reload data from scratch
     loadUserData(currentUser.id);
   }
 }

@@ -112,6 +112,11 @@ export interface Booking {
     name: string;
     avatar: string;
   };
+  surfer?: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
   checkIn: string;
   checkOut: string;
   guests: number;

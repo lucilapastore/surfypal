@@ -17,7 +17,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 export function DashboardBookings() {
-  const { userBookings, cancelBooking } = useSurfyPalStore();
+  const { userBookings, cancelBooking, currentUser } = useSurfyPalStore();
   const [isCancelling, setIsCancelling] = useState<string | null>(null);
 
   const handleCancel = async (id: string) => {
@@ -119,7 +119,8 @@ export function DashboardBookings() {
               {booking.status === "completed" && !booking.reviewed && (
                 <Button size="sm" asChild>
                   <Link href={`/rate/${booking.id}`}>
-                    Rate {booking.host.id === "user1" ? "Surfer" : "Host"}
+                    Rate{" "}
+                    {booking.host.id === currentUser?.id ? "Surfer" : "Host"}
                   </Link>
                 </Button>
               )}

@@ -7,6 +7,7 @@ import {
   getUserListings,
   getUserRatings,
   getUserReviews,
+  mockBookings,
   mockListings,
   mockUsers,
 } from "@/lib/mock-data";
@@ -25,21 +26,39 @@ import type {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // User APIs
-export async function getUser(id: string): Promise<User | null> {
+export async function getUser(userId: string): Promise<User | null> {
   await delay(500);
-  return mockUsers.find((user) => user.id === id) || null;
+  const user = mockUsers.find((user) => user.id === userId);
+  return user || null;
 }
 
 export async function mockSignUp(data: SignUpData): Promise<User> {
   await delay(1000);
-  // Return a mock user
-  return mockUsers[0];
+  // For demo purposes, we're just returning one of the existing users
+  // based on userType, rather than creating a new one
+
+  // Return user1 if host, user2 if surfer
+  const mockUser =
+    data.userType === "host"
+      ? mockUsers.find((u) => u.id === "user1")
+      : mockUsers.find((u) => u.id === "user2");
+
+  if (!mockUser) throw new Error("User not found");
+  return mockUser;
 }
 
-export async function mockSignIn(): Promise<User> {
+export async function mockSignIn(
+  userType: "host" | "surfer" = "host"
+): Promise<User> {
   await delay(1000);
-  // Return a mock user
-  return mockUsers[0];
+  // Return user1 if host, user2 if surfer
+  const user =
+    userType === "host"
+      ? mockUsers.find((u) => u.id === "user1")
+      : mockUsers.find((u) => u.id === "user2");
+
+  if (!user) throw new Error("User not found");
+  return user;
 }
 
 // Listing APIs
@@ -111,21 +130,26 @@ export {
 export async function mockCreateBooking(data: BookingData): Promise<Booking> {
   await delay(1000);
 
-  // Create a mock booking
   const listing = mockListings.find((l) => l.id === data.listingId);
-  const host = mockUsers.find((u) => u.id === data.hostId);
+  if (!listing) throw new Error("Listing not found");
 
-  if (!listing || !host) {
-    throw new Error("Invalid listing or host ID");
-  }
+  const host = mockUsers.find((u) => u.id === data.hostId);
+  if (!host) throw new Error("Host not found");
+
+  // Get the surfer user (hard-coded as user2 for demo)
+  const surfer = mockUsers.find((u) => u.id === "user2");
+  if (!surfer) throw new Error("Surfer not found");
 
   const newBooking: Booking = {
     id: `booking${Date.now()}`,
     listing: {
       id: listing.id,
       title: listing.title,
-      location: listing.location,
-      images: listing.images,
+      location: {
+        city: listing.location.city,
+        country: listing.location.country,
+      },
+      images: [listing.images[0]],
       price: listing.price,
     },
     host: {
@@ -133,16 +157,13 @@ export async function mockCreateBooking(data: BookingData): Promise<Booking> {
       name: host.name,
       avatar: host.avatar,
     },
-    checkIn: data.checkIn.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    }),
-    checkOut: data.checkOut.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    }),
+    surfer: {
+      id: surfer.id,
+      name: surfer.name,
+      avatar: surfer.avatar,
+    },
+    checkIn: data.checkIn.toDateString(),
+    checkOut: data.checkOut.toDateString(),
     guests: data.guests,
     totalPrice: data.totalPrice,
     collateralAmount: data.collateralAmount,
@@ -150,45 +171,54 @@ export async function mockCreateBooking(data: BookingData): Promise<Booking> {
     reviewed: false,
   };
 
+  // Add the booking to mock data
+  mockBookings.upcoming.push(newBooking);
+
   return newBooking;
 }
 
 export async function mockCancelBooking(id: string): Promise<void> {
-  await delay(1000);
-  // In a real app, we would update the booking status in the database
-  return;
+  await delay(500);
+  const bookingIndex = mockBookings.upcoming.findIndex((b) => b.id === id);
+  if (bookingIndex === -1) throw new Error("Booking not found");
+
+  const booking = mockBookings.upcoming[bookingIndex];
+  mockBookings.upcoming.splice(bookingIndex, 1);
+  mockBookings.cancelled.push({
+    ...booking,
+    status: "cancelled",
+  });
 }
 
 export async function mockDeleteListing(id: string): Promise<void> {
-  await delay(1000);
-  // In a real app, we would delete the listing from the database
-  return;
+  await delay(500);
+  const index = mockListings.findIndex((listing) => listing.id === id);
+  if (index === -1) throw new Error("Listing not found");
+  mockListings.splice(index, 1);
 }
 
 // Update the mockCreateListing function to add the new listing to mockListings
 export async function mockCreateListing(data: ListingData): Promise<Listing> {
   await delay(1000);
 
-  // Get current user for host info
-  const currentUser = mockUsers[0]; // In a real app, this would be the authenticated user
+  // Always use user1 (Alex Johnson) as the host for demo
+  const host = mockUsers.find((u) => u.id === "user1");
+  if (!host) throw new Error("Host not found");
 
   const newListing: Listing = {
     id: `listing${Date.now()}`,
     ...data,
     host: {
-      id: currentUser.id,
-      name: currentUser.name,
-      avatar: currentUser.avatar,
-      trustScore: currentUser.trustScore,
+      id: host.id,
+      name: host.name,
+      avatar: host.avatar,
+      trustScore: host.trustScore,
     },
     rating: 0,
     reviewCount: 0,
-    featured: false,
   };
 
-  // Add the new listing to mockListings so it can be retrieved later
   mockListings.push(newListing);
-
   return newListing;
 }
 
@@ -233,6 +263,33 @@ export async function mockSubmitRating(
       bonusPoints,
       penaltyPoints
     );
+
+    // Mark the booking as reviewed
+    const { bookingId } = data;
+
+    // Find the booking in mock data
+    let bookingFound = false;
+
+    // Look through all booking categories (upcoming, past, cancelled)
+    for (const category of ["upcoming", "past", "cancelled"]) {
+      const categoryKey = category as keyof typeof mockBookings;
+      const bookingIndex = mockBookings[categoryKey].findIndex(
+        (b) => b.id === bookingId
+      );
+
+      if (bookingIndex !== -1) {
+        // Mark as reviewed
+        mockBookings[categoryKey][bookingIndex].reviewed = true;
+        bookingFound = true;
+        break;
+      }
+    }
+
+    if (!bookingFound) {
+      console.warn(
+        `Booking with ID ${bookingId} not found when marking as reviewed`
+      );
+    }
 
     return {
       success: true,

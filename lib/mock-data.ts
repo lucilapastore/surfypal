@@ -7,7 +7,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const mockUsers: User[] = [
   {
     id: "user1",
-    name: "Alex Johnson",
+    name: "Alex Johnson (Host)",
     email: "alex@example.com",
     avatar: "/placeholder.svg?height=200&width=200",
     bio: "Digital nomad and travel enthusiast. I love exploring new cultures and meeting people from around the world.",
@@ -15,19 +15,19 @@ export const mockUsers: User[] = [
     joinedDate: "January 2023",
     trustScore: 85,
     isSuperhost: true,
-    userType: "both",
+    userType: "host",
   },
   {
     id: "user2",
-    name: "Maria Garcia",
+    name: "Maria Garcia (Surfer)",
     email: "maria@example.com",
     avatar: "/placeholder.svg?height=200&width=200",
-    bio: "Passionate about sustainable travel and authentic experiences. I enjoy hosting travelers and sharing my local knowledge.",
+    bio: "Passionate about sustainable travel and authentic experiences. I enjoy exploring new places and meeting locals.",
     location: "Barcelona, Spain",
     joinedDate: "March 2023",
     trustScore: 92,
-    isSuperhost: true,
-    userType: "host",
+    isSuperhost: false,
+    userType: "surfer",
   },
   {
     id: "user3",
@@ -93,7 +93,7 @@ export const mockListings: Listing[] = [
     },
     host: {
       id: "user1",
-      name: "Alex Johnson",
+      name: "Alex Johnson (Host)",
       avatar: "/placeholder.svg?height=200&width=200",
       trustScore: 85,
     },
@@ -136,10 +136,10 @@ export const mockListings: Listing[] = [
       },
     },
     host: {
-      id: "user2",
-      name: "Maria Garcia",
+      id: "user1",
+      name: "Alex Johnson (Host)",
       avatar: "/placeholder.svg?height=200&width=200",
-      trustScore: 92,
+      trustScore: 85,
     },
     capacity: 8,
     bedrooms: 4,
@@ -181,10 +181,10 @@ export const mockListings: Listing[] = [
       },
     },
     host: {
-      id: "user4",
-      name: "Sophie Chen",
+      id: "user1",
+      name: "Alex Johnson (Host)",
       avatar: "/placeholder.svg?height=200&width=200",
-      trustScore: 65,
+      trustScore: 85,
     },
     capacity: 6,
     bedrooms: 3,
@@ -218,10 +218,10 @@ export const mockListings: Listing[] = [
       },
     },
     host: {
-      id: "user5",
-      name: "David Kim",
+      id: "user1",
+      name: "Alex Johnson (Host)",
       avatar: "/placeholder.svg?height=200&width=200",
-      trustScore: 88,
+      trustScore: 85,
     },
     capacity: 2,
     bedrooms: 1,
@@ -262,10 +262,10 @@ export const mockListings: Listing[] = [
       },
     },
     host: {
-      id: "user3",
-      name: "Raj Patel",
+      id: "user1",
+      name: "Alex Johnson (Host)",
       avatar: "/placeholder.svg?height=200&width=200",
-      trustScore: 78,
+      trustScore: 85,
     },
     capacity: 4,
     bedrooms: 2,
@@ -307,7 +307,7 @@ export const mockListings: Listing[] = [
     },
     host: {
       id: "user1",
-      name: "Alex Johnson",
+      name: "Alex Johnson (Host)",
       avatar: "/placeholder.svg?height=200&width=200",
       trustScore: 85,
     },
@@ -336,10 +336,10 @@ export const mockReviews: Review[] = [
     listingId: "listing1",
     listingTitle: "Cozy Apartment in Downtown",
     author: {
-      id: "user3",
-      name: "Raj Patel",
+      id: "user2",
+      name: "Maria Garcia (Surfer)",
       avatar: "/placeholder.svg?height=200&width=200",
-      trustScore: 78,
+      trustScore: 92,
     },
     rating: 5,
     content:
@@ -367,7 +367,7 @@ export const mockReviews: Review[] = [
     listingTitle: "Beachfront Villa with Ocean Views",
     author: {
       id: "user1",
-      name: "Alex Johnson",
+      name: "Alex Johnson (Host)",
       avatar: "/placeholder.svg?height=200&width=200",
       trustScore: 85,
     },
@@ -397,7 +397,7 @@ export const mockReviews: Review[] = [
     listingTitle: "Modern Loft in Tech District",
     author: {
       id: "user2",
-      name: "Maria Garcia",
+      name: "Maria Garcia (Surfer)",
       avatar: "/placeholder.svg?height=200&width=200",
       trustScore: 92,
     },
@@ -429,65 +429,10 @@ export const mockBookings: {
   past: Booking[];
   cancelled: Booking[];
 } = {
-  upcoming: [
-    {
-      id: "booking1",
-      listing: {
-        id: "listing2",
-        title: "Beachfront Villa with Ocean Views",
-        location: {
-          city: "Barcelona",
-          country: "Spain",
-        },
-        images: [
-          "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/7a0bbe51-2e52-4100-8050-ddf20d9f9c0c.jpeg?im_w=720",
-        ],
-        price: 350,
-      },
-      host: {
-        id: "user2",
-        name: "Maria Garcia",
-        avatar: "/placeholder.svg?height=200&width=200",
-      },
-      checkIn: "October 15, 2023",
-      checkOut: "October 22, 2023",
-      guests: 4,
-      totalPrice: 2450,
-      collateralAmount: 245,
-      status: "confirmed",
-      reviewed: false,
-    },
-    {
-      id: "booking2",
-      listing: {
-        id: "listing5",
-        title: "Charming Cottage in the Countryside",
-        location: {
-          city: "Cotswolds",
-          country: "United Kingdom",
-        },
-        images: [
-          "https://a0.muscache.com/im/ml/photo_enhancement/pictures/miso/Hosting-44113492/original/956a12e0-d7ad-4a0f-b051-5a39cde69df0.jpeg?im_w=720",
-        ],
-        price: 200,
-      },
-      host: {
-        id: "user3",
-        name: "Raj Patel",
-        avatar: "/placeholder.svg?height=200&width=200",
-      },
-      checkIn: "November 5, 2023",
-      checkOut: "November 10, 2023",
-      guests: 2,
-      totalPrice: 1000,
-      collateralAmount: 100,
-      status: "confirmed",
-      reviewed: false,
-    },
-  ],
+  upcoming: [],
   past: [
     {
-      id: "booking3",
+      id: "booking1",
       listing: {
         id: "listing1",
         title: "Cozy Apartment in Downtown",
@@ -502,7 +447,12 @@ export const mockBookings: {
       },
       host: {
         id: "user1",
-        name: "Alex Johnson",
+        name: "Alex Johnson (Host)",
+        avatar: "/placeholder.svg?height=200&width=200",
+      },
+      surfer: {
+        id: "user2",
+        name: "Maria Garcia (Surfer)",
         avatar: "/placeholder.svg?height=200&width=200",
       },
       checkIn: "August 10, 2023",
@@ -514,62 +464,39 @@ export const mockBookings: {
       reviewed: true,
     },
     {
-      id: "booking4",
+      id: "booking2",
       listing: {
-        id: "listing3",
-        title: "Traditional Home in Historic District",
+        id: "listing2",
+        title: "Beachfront Villa with Ocean Views",
         location: {
-          city: "Kyoto",
-          country: "Japan",
+          city: "Barcelona",
+          country: "Spain",
         },
         images: [
-          "https://a0.muscache.com/im/pictures/miso/Hosting-46677436/original/bde5a123-9e69-49a1-b633-d96735350e20.jpeg?im_w=720",
+          "https://a0.muscache.com/im/pictures/miso/Hosting-44566584/original/7a0bbe51-2e52-4100-8050-ddf20d9f9c0c.jpeg?im_w=720",
         ],
-        price: 180,
+        price: 350,
       },
       host: {
-        id: "user4",
-        name: "Sophie Chen",
+        id: "user1",
+        name: "Alex Johnson (Host)",
+        avatar: "/placeholder.svg?height=200&width=200",
+      },
+      surfer: {
+        id: "user2",
+        name: "Maria Garcia (Surfer)",
         avatar: "/placeholder.svg?height=200&width=200",
       },
       checkIn: "July 5, 2023",
-      checkOut: "July 10, 2023",
+      checkOut: "July 12, 2023",
       guests: 3,
-      totalPrice: 900,
-      collateralAmount: 90,
+      totalPrice: 2450,
+      collateralAmount: 245,
       status: "completed",
       reviewed: false,
     },
   ],
-  cancelled: [
-    {
-      id: "booking5",
-      listing: {
-        id: "listing4",
-        title: "Modern Loft in Tech District",
-        location: {
-          city: "Seoul",
-          country: "South Korea",
-        },
-        images: [
-          "https://a0.muscache.com/im/ml/photo_enhancement/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEyMTE0NjM4NzQ5NDgxNTM4Mg==/original/c84a251e-ae33-4796-b322-6e79ce12b4a3.jpeg?im_w=720",
-        ],
-        price: 150,
-      },
-      host: {
-        id: "user5",
-        name: "David Kim",
-        avatar: "/placeholder.svg?height=200&width=200",
-      },
-      checkIn: "September 20, 2023",
-      checkOut: "September 25, 2023",
-      guests: 1,
-      totalPrice: 750,
-      collateralAmount: 75,
-      status: "cancelled",
-      reviewed: false,
-    },
-  ],
+  cancelled: [],
 };
 
 // Mock Ratings
@@ -577,8 +504,8 @@ export const mockRatings: Rating[] = [
   {
     id: "rating1",
     bookingId: "booking1",
-    userId: "user2", // Host being rated
-    raterId: "user1", // Surfer who submitted the rating
+    userId: "user1", // Host being rated
+    raterId: "user2", // Surfer who submitted the rating
     criteria: {
       cleanliness: 5,
       communication: 4,
@@ -588,14 +515,14 @@ export const mockRatings: Rating[] = [
     },
     averageRating: 4.6,
     comments: "Great host, very welcoming and accommodating!",
-    date: "March 15, 2024",
+    date: "August 16, 2023",
     affectedTrustScore: 3,
   },
   {
     id: "rating2",
-    bookingId: "booking2",
-    userId: "user1", // Surfer being rated
-    raterId: "user2", // Host who submitted the rating
+    bookingId: "booking1",
+    userId: "user2", // Surfer being rated
+    raterId: "user1", // Host who submitted the rating
     criteria: {
       cleanliness: 4,
       communication: 5,
@@ -606,7 +533,7 @@ export const mockRatings: Rating[] = [
     averageRating: 4.2,
     comments:
       "Great surfer, left the place clean and followed all house rules.",
-    date: "March 10, 2024",
+    date: "August 16, 2023",
     affectedTrustScore: 2,
   },
 ];
@@ -670,24 +597,47 @@ export function getTrustScoreHistory(userId: string): Promise<any[]> {
 }
 
 export function getUserListings(userId: string): Promise<Listing[]> {
-  return Promise.resolve(
-    mockListings.filter((listing) => listing.host.id === userId)
-  );
+  // Only user1 (host) should have listings
+  if (userId === "user1") {
+    return Promise.resolve(
+      mockListings.filter((listing) => listing.host.id === userId)
+    );
+  }
+
+  // For user2 (surfer) and other users, return empty array
+  return Promise.resolve([]);
 }
 
 export function getUserReviews(userId: string): Promise<{
   received: Review[];
   given: Review[];
 }> {
-  const received = mockReviews.filter((review) =>
-    mockListings.some(
-      (listing) => listing.host.id === userId && listing.id === review.listingId
-    )
-  );
+  // For host (user1), received reviews are reviews on their listings
+  if (userId === "user1") {
+    const received = mockReviews.filter((review) =>
+      mockListings.some(
+        (listing) =>
+          listing.host.id === userId && listing.id === review.listingId
+      )
+    );
 
-  const given = mockReviews.filter((review) => review.author.id === userId);
+    // Given reviews are from the host to surfers
+    const given = mockReviews.filter((review) => review.author.id === userId);
 
-  return Promise.resolve({ received, given });
+    return Promise.resolve({ received, given });
+  }
+
+  // For surfer (user2), received reviews are those given by hosts about them as surfers
+  // Given reviews are those written by the surfer about listings they stayed at
+  if (userId === "user2") {
+    const received: Review[] = []; // In a real app, this would be reviews about the surfer
+    const given = mockReviews.filter((review) => review.author.id === userId);
+
+    return Promise.resolve({ received, given });
+  }
+
+  // For other users, return empty arrays
+  return Promise.resolve({ received: [], given: [] });
 }
 
 export function getUserBookings(userId: string): Promise<{
@@ -695,9 +645,38 @@ export function getUserBookings(userId: string): Promise<{
   past: Booking[];
   cancelled: Booking[];
 }> {
-  // In a real app, we would filter based on the user ID
-  // For this mock, we'll just return all bookings
-  return Promise.resolve(mockBookings);
+  // For user1 (host), return bookings where they are the host
+  if (userId === "user1") {
+    return Promise.resolve({
+      upcoming: mockBookings.upcoming.filter(
+        (booking) => booking.host.id === userId
+      ),
+      past: mockBookings.past.filter((booking) => booking.host.id === userId),
+      cancelled: mockBookings.cancelled.filter(
+        (booking) => booking.host.id === userId
+      ),
+    });
+  }
+  // For user2 (surfer), return bookings where they are the surfer
+  if (userId === "user2") {
+    return Promise.resolve({
+      upcoming: mockBookings.upcoming.filter(
+        (booking) => booking.surfer && booking.surfer.id === userId
+      ),
+      past: mockBookings.past.filter(
+        (booking) => booking.surfer && booking.surfer.id === userId
+      ),
+      cancelled: mockBookings.cancelled.filter(
+        (booking) => booking.surfer && booking.surfer.id === userId
+      ),
+    });
+  }
+  // For other users, return empty bookings
+  return Promise.resolve({
+    upcoming: [],
+    past: [],
+    cancelled: [],
+  });
 }
 
 // Get user ratings (ratings received by a user)

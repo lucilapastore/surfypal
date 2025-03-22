@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSurfyPalStore } from "@/lib/store";
+import { WorldIdButton } from "@/components/auth/world-id-button";
+import { TrustScoreExplainer } from "@/components/home/trust-score-explainer";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,19 +13,55 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { WorldIdButton } from "@/components/auth/world-id-button";
-import { TrustScoreExplainer } from "@/components/home/trust-score-explainer";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useSurfyPalStore } from "@/lib/store";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function SignUpPage() {
   const [step, setStep] = useState(1);
   const [userType, setUserType] = useState<"surfer" | "host" | "both">(
     "surfer"
   );
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    bio: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { signUp } = useSurfyPalStore();
+  const router = useRouter();
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      await signUp({
+        name: formData.name || "Demo User",
+        email: formData.email || "demo@example.com",
+        userType: userType,
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Failed to create account:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
@@ -164,7 +199,12 @@ export default function SignUpPage() {
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" placeholder="Your name" />
+                  <Input
+                    id="name"
+                    placeholder="Your name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -172,6 +212,8 @@ export default function SignUpPage() {
                     id="email"
                     type="email"
                     placeholder="you@example.com"
+                    value={formData.email}
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -181,6 +223,8 @@ export default function SignUpPage() {
                     placeholder="Tell us a bit about yourself..."
                     className="resize-none"
                     rows={4}
+                    value={formData.bio}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -189,7 +233,9 @@ export default function SignUpPage() {
                 <Button variant="outline" onClick={() => setStep(2)}>
                   Back
                 </Button>
-                <Button>Create Account</Button>
+                <Button onClick={handleSubmit} disabled={isSubmitting}>
+                  {isSubmitting ? "Creating Account..." : "Create Account"}
+                </Button>
               </div>
             </div>
           )}

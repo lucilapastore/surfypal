@@ -1,34 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useSurfyPalStore } from "@/lib/store"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { TrustScoreBadge } from "@/components/trust-score/trust-score-badge"
-import { Menu, Home, Search, User, LogOut, LayoutDashboard, MessageSquare, Heart } from "lucide-react"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useSurfyPalStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
+import {
+  Heart,
+  Home,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Search,
+  User,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const mainNavItems = [
   { name: "Home", href: "/" },
   { name: "Listings", href: "/listings" },
   { name: "How It Works", href: "/#how-it-works" },
   { name: "About", href: "/about" },
-]
+];
 
 export default function Header() {
-  const [open, setOpen] = useState(false)
-  const pathname = usePathname()
-  const { currentUser, signOut } = useSurfyPalStore()
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const { currentUser, signOut } = useSurfyPalStore();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -45,7 +53,9 @@ export default function Header() {
                 href={item.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === item.href ? "text-foreground" : "text-muted-foreground",
+                  pathname === item.href
+                    ? "text-foreground"
+                    : "text-muted-foreground"
                 )}
               >
                 {item.name}
@@ -57,15 +67,19 @@ export default function Header() {
         <div className="flex items-center gap-4">
           {currentUser ? (
             <>
-              <TrustScoreBadge score={currentUser.trustScore} className="hidden md:flex" />
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Button variant="ghost">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-                      <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+                      <AvatarImage
+                        src={currentUser.avatar}
+                        alt={currentUser.name}
+                      />
+                      <AvatarFallback>
+                        {currentUser.name.charAt(0)}
+                      </AvatarFallback>
                     </Avatar>
+                    <span>{currentUser.name}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -127,7 +141,11 @@ export default function Header() {
                   </Link>
                 </div>
                 <nav className="grid gap-3">
-                  <Link href="/" className="flex items-center gap-2 text-sm font-medium" onClick={() => setOpen(false)}>
+                  <Link
+                    href="/"
+                    className="flex items-center gap-2 text-sm font-medium"
+                    onClick={() => setOpen(false)}
+                  >
                     <Home className="h-4 w-4" />
                     Home
                   </Link>
@@ -159,8 +177,8 @@ export default function Header() {
                       </Link>
                       <button
                         onClick={() => {
-                          signOut()
-                          setOpen(false)
+                          signOut();
+                          setOpen(false);
                         }}
                         className="flex items-center gap-2 text-sm font-medium"
                       >
@@ -189,6 +207,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
-
