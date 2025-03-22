@@ -8,14 +8,16 @@ interface IRequestPayload {
   payload: ISuccessResult;
   action: string;
   userId: string;
+  signal?: string;
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    const { payload, action, userId } = (await req.json()) as IRequestPayload;
+    const { payload, action, signal, userId } =
+      (await req.json()) as IRequestPayload;
 
     const app_id = process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID as `app_${string}`;
-    const verifyRes = await verifyCloudProof(payload, app_id, action);
+    const verifyRes = await verifyCloudProof(payload, app_id, action, signal);
 
     if (verifyRes.success) {
       // Update user as verified in your existing API

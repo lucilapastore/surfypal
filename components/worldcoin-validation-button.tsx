@@ -104,7 +104,7 @@ const WorldcoinValidationButton: FC<WorldcoinValidationButtonProps> = ({
         variant="outline"
       >
         <Fingerprint size={20} className="text-primary" />
-        Validate with Worldcoin
+        Verify with World ID
       </Button>
     );
   };
