@@ -40,7 +40,7 @@ interface SurfyPalState {
   signUp: (data: SignUpData) => Promise<void>;
   signIn: (userType?: "host" | "surfer") => Promise<void>;
   signOut: () => void;
-  createBooking: (data: BookingData) => Promise<void>;
+  createBooking: (data: BookingData) => Promise<Booking>;
   cancelBooking: (id: string) => Promise<void>;
   createListing: (data: ListingData) => Promise<Listing>;
   deleteListing: (id: string) => Promise<void>;
@@ -159,6 +159,7 @@ export const useSurfyPalStore = create<SurfyPalState>()(
               upcoming: [...state.userBookings.upcoming, booking],
             },
           }));
+          return booking;
         } catch (error) {
           console.error("Failed to create booking:", error);
           throw error;

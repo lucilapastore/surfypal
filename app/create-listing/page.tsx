@@ -17,7 +17,15 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import { Loader2, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { CheckCircle2 } from "lucide-react";
 
 const AMENITIES = [
   "Wifi",
@@ -47,6 +55,17 @@ const sendSuccessHapticFeedback = () => {
 export default function CreateListingPage() {
   const router = useRouter();
   const { currentUser, createListing, isLoading } = useSurfyPalStore();
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [showLoadingDialog, setShowLoadingDialog] = useState(false);
+  const [createdListingId, setCreatedListingId] = useState<string | null>(null);
+
+  // Move redirect logic to useEffect
+  useEffect(() => {
+    if (typeof window !== "undefined" && !currentUser) {
+      router.push("/signin");
+    }
+  }, [currentUser, router]);
+
   const [formData, setFormData] = useState<ListingData>({
     title: "",
     description: "",
@@ -65,12 +84,6 @@ export default function CreateListingPage() {
   });
 
   const [previewListing, setPreviewListing] = useState<Listing | null>(null);
-
-  // Redirect if not logged in
-  if (typeof window !== "undefined" && !currentUser) {
-    router.push("/signin");
-    return null;
-  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -154,6 +167,7 @@ export default function CreateListingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setShowLoadingDialog(true);
 
     try {
       const newListing = await createListing(formData);
@@ -162,9 +176,13 @@ export default function CreateListingPage() {
       // Send haptic feedback for successful listing creation
       sendSuccessHapticFeedback();
 
-      router.push(`/listings/${newListing.id}`);
+      // Hide loading and show success
+      setShowLoadingDialog(false);
+      setCreatedListingId(newListing.id);
+      setShowSuccessDialog(true);
     } catch (error) {
       console.error("Failed to create listing:", error);
+      setShowLoadingDialog(false);
     }
   };
 
@@ -495,6 +513,49 @@ export default function CreateListingPage() {
           )}
         </div>
       </div>
+
+      <Dialog open={showLoadingDialog} onOpenChange={setShowLoadingDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="mx-auto flex h-20 w-20 items-center justify-center">
+              <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            </div>
+            <DialogTitle className="text-center text-xl">
+              Creating Your Listing
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Please wait while we set up your property listing...
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle2 className="h-10 w-10 text-green-600" />
+            </div>
+            <DialogTitle className="text-center text-xl">
+              Listing Created Successfully!
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Your property has been listed successfully. You can now start
+              receiving booking requests from verified guests.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 flex justify-center">
+            <Button
+              onClick={() => {
+                setShowSuccessDialog(false);
+                router.push(`/listings/${createdListingId}`);
+              }}
+            >
+              View Your Listing
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -6,10 +6,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { getUserBookings, mockSubmitRating, type RatingData } from "@/lib/api";
 import { useSurfyPalStore } from "@/lib/store";
 import type { Booking } from "@/types";
-import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { CheckCircle2, Loader2, Star } from "lucide-react";
 
 interface RatingFormProps {
   bookingId: string;
@@ -27,6 +34,8 @@ export function RatingForm({ bookingId }: RatingFormProps) {
   const { currentUser } = useSurfyPalStore();
   const [loading, setLoading] = useState(false);
   const [comments, setComments] = useState("");
+  const [showLoadingDialog, setShowLoadingDialog] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [bookingData, setBookingData] = useState<{
     booking: Booking | null;
     userId: string; // Current user ID
@@ -163,7 +172,7 @@ export function RatingForm({ bookingId }: RatingFormProps) {
       return;
     }
 
-    setLoading(true);
+    setShowLoadingDialog(true);
 
     try {
       // Create ratings object
@@ -181,7 +190,7 @@ export function RatingForm({ bookingId }: RatingFormProps) {
       // Prepare rating data
       const ratingData: RatingData = {
         bookingId,
-        userId: bookingData.targetUserId, // ID of the user being rated
+        userId: bookingData.targetUserId,
         ratings: ratingsObject,
         averageRating,
         comments: comments.trim() || undefined,
@@ -191,21 +200,13 @@ export function RatingForm({ bookingId }: RatingFormProps) {
       const result = await mockSubmitRating(ratingData);
 
       if (result.success) {
-        // Mark booking as reviewed
-        // In a real app, we would update the booking status via API
-
-        toast.success("Your rating has been submitted successfully!");
-
-        // Redirect back to bookings page
-        setTimeout(() => {
-          router.push("/dashboard?tab=bookings");
-        }, 1500);
+        setShowLoadingDialog(false);
+        setShowSuccessDialog(true);
       }
     } catch (error) {
       console.error("Failed to submit rating:", error);
       toast.error("Failed to submit rating. Please try again.");
-    } finally {
-      setLoading(false);
+      setShowLoadingDialog(false);
     }
   };
 
@@ -219,12 +220,12 @@ export function RatingForm({ bookingId }: RatingFormProps) {
             key={starValue}
             type="button"
             onClick={() => handleStarClick(criteriaIndex, starValue)}
-            className={`p-1 hover:text-yellow-400 ${
+            className={`p-0.5 hover:text-yellow-400 ${
               criterion.score >= starValue ? "text-yellow-400" : "text-gray-300"
             }`}
             aria-label={`Rate ${starValue} star${starValue !== 1 ? "s" : ""}`}
           >
-            <Star className="h-8 w-8 fill-current" />
+            <Star className="h-6 w-6 fill-current" />
           </button>
         ))}
       </div>
@@ -242,49 +243,132 @@ export function RatingForm({ bookingId }: RatingFormProps) {
   }
 
   return (
-    <div className="space-y-8">
-      {criteria.map((criterion, index) => (
-        <Card key={criterion.name} className="overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="space-y-1">
-                <h3 className="text-xl font-semibold">{criterion.label}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {criterion.description}
-                </p>
+    <>
+      <div className="space-y-6">
+        {criteria.map((criterion, index) => (
+          <Card key={criterion.name} className="overflow-hidden">
+            <CardContent className="p-4">
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div className="space-y-1">
+                  <h3 className="text-lg font-medium">{criterion.label}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {criterion.description}
+                  </p>
+                </div>
+                <div className="flex justify-center">{renderStars(index)}</div>
               </div>
-              <div className="flex justify-center">{renderStars(index)}</div>
+            </CardContent>
+          </Card>
+        ))}
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium">Additional Comments</h3>
+              <p className="text-sm text-muted-foreground">
+                Please share any additional feedback about your experience.
+              </p>
+              <Textarea
+                placeholder="What could be improved? What went well? (Optional)"
+                value={comments}
+                onChange={(e) => setComments(e.target.value)}
+                className="min-h-32"
+              />
             </div>
           </CardContent>
         </Card>
-      ))}
 
-      <Card>
-        <CardContent className="p-6">
-          <div className="space-y-3">
-            <h3 className="text-xl font-semibold">Additional Comments</h3>
-            <p className="text-sm text-muted-foreground">
-              Please share any additional feedback about your experience.
-            </p>
-            <Textarea
-              placeholder="What could be improved? What went well? (Optional)"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              className="min-h-32"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center">
-        <Button
-          size="lg"
-          onClick={handleSubmit}
-          disabled={loading || criteria.some((c) => c.score === 0)}
-        >
-          {loading ? "Submitting..." : "Submit Rating"}
-        </Button>
+        <div className="flex justify-center pt-4">
+          <Button
+            size="lg"
+            onClick={handleSubmit}
+            disabled={loading || criteria.some((c) => c.score === 0)}
+          >
+            {loading ? "Submitting..." : "Submit Rating"}
+          </Button>
+        </div>
       </div>
-    </div>
+
+      <Dialog open={showLoadingDialog} onOpenChange={setShowLoadingDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="mx-auto flex h-20 w-20 items-center justify-center">
+              <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            </div>
+            <DialogTitle className="text-center text-xl">
+              Submitting Your Rating
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Please wait while we process your feedback...
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle2 className="h-10 w-10 text-green-600" />
+            </div>
+            <DialogTitle className="text-center text-xl">
+              Rating Submitted Successfully!
+            </DialogTitle>
+            <DialogDescription asChild>
+              <div className="space-y-4 pt-4 text-center">
+                <div className="space-y-2">
+                  <div className="mb-2 font-medium">
+                    Average Rating:{" "}
+                    {criteria.reduce((sum, c) => sum + c.score, 0) /
+                      criteria.length}{" "}
+                    / 5
+                  </div>
+                  <div className="flex justify-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`h-5 w-5 ${
+                          star <=
+                          criteria.reduce((sum, c) => sum + c.score, 0) /
+                            criteria.length
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="mb-1 font-medium text-green-600">
+                    Trust Score Impact
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    This rating will add{" "}
+                    {Math.round(
+                      (criteria.reduce((sum, c) => sum + c.score, 0) /
+                        criteria.length) *
+                        2
+                    )}{" "}
+                    points to your Trust Score and affect the{" "}
+                    {bookingData.userType}&apos;s Trust Score by{" "}
+                    {Math.round(
+                      (criteria.reduce((sum, c) => sum + c.score, 0) /
+                        criteria.length) *
+                        3
+                    )}{" "}
+                    points.
+                  </div>
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-6 flex justify-center">
+            <Button onClick={() => router.push("/dashboard?tab=bookings")}>
+              Go to Dashboard
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
