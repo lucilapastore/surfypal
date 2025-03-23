@@ -1,5 +1,6 @@
 "use client";
 
+import { updateUser } from "@/lib/api";
 import {
   ISuccessResult,
   VerificationLevel,
@@ -45,6 +46,8 @@ const useWorldCoin = () => {
         toast.error("Verification failed. Please try again.");
         throw new Error(data.error || "Verification failed");
       }
+
+      await updateUser(userId, { worldIdVerified: true });
 
       return true;
     } catch (error) {

@@ -21,10 +21,12 @@ import { toast } from "sonner";
 
 interface WorldcoinValidationButtonProps {
   user: User;
+  onSuccess?: () => void;
 }
 
 const WorldcoinValidationButton: FC<WorldcoinValidationButtonProps> = ({
   user,
+  onSuccess,
 }) => {
   const [isMiniKit, setMiniKit] = useState<boolean>(false);
   const { verifyWithServer, handleVerifyIdKit } = useWorldCoin();
@@ -93,6 +95,7 @@ const WorldcoinValidationButton: FC<WorldcoinValidationButtonProps> = ({
   const onSuccessIdKit = async () => {
     toast.success("Successfully verified with Worldcoin!");
     router.refresh();
+    onSuccess?.();
   };
 
   // Create the validation button

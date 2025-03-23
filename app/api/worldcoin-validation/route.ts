@@ -17,7 +17,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       (await req.json()) as IRequestPayload;
 
     const app_id = process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID as `app_${string}`;
-    const verifyRes = await verifyCloudProof(payload, app_id, action, signal);
+    const verifyRes = await verifyCloudProof(payload, app_id, action);
 
     if (verifyRes.success) {
       // Update user as verified in your existing API
